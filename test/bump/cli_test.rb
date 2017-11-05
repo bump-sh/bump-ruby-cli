@@ -1,17 +1,11 @@
 require "test_helper"
 
 describe Bump::CLI do
-  before do
-    @original_path = ENV['PATH']
-    ENV['PATH'] = File.expand_path("../../..", __FILE__) + '/exe:' + ENV['PATH']
-  end
-
-  after do
-    ENV['PATH'] = @original_path
-  end
-
-  it "has a version number" do
-    refute_nil ::Bump::CLI::VERSION
+  around do |&block|
+    modified_path = File.expand_path("../../..", __FILE__) + '/exe:' + ENV['PATH']
+    ClimateControl.modify PATH: modified_path do
+      super(&block)
+    end
   end
 
   describe "validate command" do
