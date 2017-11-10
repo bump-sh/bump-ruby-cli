@@ -18,6 +18,34 @@ module Bump
         end
       end
 
+      class Version < Hanami::CLI::Command
+        desc "Create a new version for a given documentation, which will become the current version"
+        option :file, desc: "Path to your API documentation file. Only OpenApi 2.0 (Swagger) format is supported currently"
+        options :format, default: "yml", values: %w[yml json], desc: "Format of the definition"
+
+        def call(**options)
+          headers = {
+            "Content-Type" => "application/json",
+            "Authorization" => "Token token=#{ENV.fetch("BUMP_TOKEN")}"
+          }
+
+          body = {
+            version: {
+              definition: File.read(options.fetch(:file)),
+              format: options.fetch(:format)
+            }
+          }
+
+          response = HTTP.headers(headers).post(BUMP_URL, body: body)
+
+          if response.code == "204"
+            puts "Documentation updated."
+          else
+            abort "An error occurred."
+          end
+        end
+      end
+
       class Deploy < Hanami::CLI::Command
         desc "Deploy the latest API version docs"
 
