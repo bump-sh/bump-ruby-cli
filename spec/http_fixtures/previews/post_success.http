@@ -1,0 +1,7 @@
+HTTP/1.1 201
+Content-Type: application/json; charset=utf-8
+
+{
+  "id": "4799e751-eb61-45f6-90ab-adba466b71ad",
+  "expires_at": "2017-12-14T10:08:34Z"
+}

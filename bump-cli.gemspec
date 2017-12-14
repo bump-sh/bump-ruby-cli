@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "hanami-cli"
+  spec.add_dependency "http"
 
   spec.add_development_dependency "bundler", "~> 1.15"
   spec.add_development_dependency "climate_control"
