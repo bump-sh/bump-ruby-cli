@@ -1,0 +1,43 @@
+version: 2
+jobs:
+  build-latest: &common-build
+    working_directory: ~/bump-cli
+    docker:
+      - image: circleci/ruby:latest
+    steps:
+      - checkout
+      - run:
+          name: Update bundle command
+          command: gem install bundle
+
+      - type: cache-restore
+        name: Restore bundle cache
+        keys:
+          - bump-bundle-{{ checksum "bump-cli.gemspec" }}
+          # fallback to using the latest cache if no exact match is found
+          - bump-bundle-
+
+      - run:
+          name: Bundle Install
+          command: bundle install --path vendor/bundle
+
+      - type: cache-save
+        name: Store bundle cache
+        key: bump-bundle-{{ checksum "bump-cli.gemspec" }}
+        paths:
+          - vendor/bundle
+
+      - run:
+          name: Run tests
+          command: rake
+  build-2-3:
+    <<: *common-build
+    docker:
+      - image: circleci/ruby:2.3.4-node
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build-latest
+      - build-2-3
