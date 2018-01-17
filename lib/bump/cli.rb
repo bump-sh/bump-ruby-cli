@@ -18,6 +18,7 @@ module Bump
   end
 end
 
+require "bump/cli/commands/base"
 require "bump/cli/commands/preview"
 
 Bump::CLI::Commands.register "preview", Bump::CLI::Commands::Preview
