@@ -20,5 +20,7 @@ end
 
 require "bump/cli/commands/base"
 require "bump/cli/commands/preview"
+require "bump/cli/commands/validate"
 
 Bump::CLI::Commands.register "preview", Bump::CLI::Commands::Preview
+Bump::CLI::Commands.register "validate", Bump::CLI::Commands::Validate
