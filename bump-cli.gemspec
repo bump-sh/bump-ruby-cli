@@ -6,8 +6,8 @@ require "bump/cli/version"
 Gem::Specification.new do |spec|
   spec.name          = "bump-cli"
   spec.version       = Bump::CLI::VERSION
-  spec.authors       = ["Mehdi Lahmam"]
-  spec.email         = ["mehdi@lahmam.com"]
+  spec.authors       = ["Mehdi Lahmam", "Sébastien Charrier"]
+  spec.email         = ["mehdi@lahmam.com", "sebastien@bump.sh"]
 
   spec.summary       = %q{Bump.sh CLI}
   spec.description   = %q{Bump.sh CLI to interact with the API}
@@ -24,11 +24,11 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "hanami-cli"
-  spec.add_dependency "http"
+  spec.add_dependency "hanami-cli", '~> 0'
+  spec.add_dependency "http", '~> 3'
 
   spec.add_development_dependency "bundler", "~> 1.15"
-  spec.add_development_dependency "climate_control"
+  spec.add_development_dependency "climate_control", '~> 0'
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3"
   spec.add_development_dependency "webmock", "~> 3"
