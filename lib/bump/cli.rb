@@ -19,8 +19,10 @@ module Bump
 end
 
 require "bump/cli/commands/base"
+require "bump/cli/commands/deploy"
 require "bump/cli/commands/preview"
 require "bump/cli/commands/validate"
 
+Bump::CLI::Commands.register "deploy", Bump::CLI::Commands::Deploy
 Bump::CLI::Commands.register "preview", Bump::CLI::Commands::Preview
 Bump::CLI::Commands.register "validate", Bump::CLI::Commands::Validate

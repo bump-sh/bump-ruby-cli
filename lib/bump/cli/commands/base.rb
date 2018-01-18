@@ -23,8 +23,11 @@ module Bump
           elsif response.code == 401
             abort "Invalid authentication string (status: 401)"
           else
-            abort "Unknown error (status: #{response.code})"
+            body = JSON.parse(response.body)
+            abort "Error : #{body["message"]} (status: #{response.code})"
           end
+        rescue JSON::ParserError => e
+          abort "Unknown error (status: #{response.code})"
         end
 
         def display_invalid_definition(body)
