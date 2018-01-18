@@ -16,13 +16,8 @@ module Bump
 
           if response.code == 200
             puts "Definition is valid."
-          elsif response.code == 422
-            body = JSON.parse(response.body)
-            display_invalid_definition(body)
-          elsif response.code == 401
-            display_generic_error("message" => "Invalid authentication string (status: 401)")
           else
-            display_generic_error("message" => "Unknown error (status: #{response.code})")
+            display_error(response)
           end
         rescue HTTP::Error => error
           display_http_error(error)

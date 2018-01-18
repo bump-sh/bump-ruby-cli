@@ -40,7 +40,7 @@ describe Bump::CLI::Commands::Preview do
       begin
         new_command.call(file: 'path/to/file', format: 'yaml')
       rescue SystemExit; end
-    end.to output(/Something bad happened./).to_stderr
+    end.to output(/Unknown error/).to_stderr
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/previews')
   end

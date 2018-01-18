@@ -10,14 +10,12 @@ module Bump
 
         def call(**options)
           response = HTTP.headers(headers(options)).post(API_URL + "/previews", body: body(options).to_json)
-          body = JSON.parse(response.body)
 
           if response.code == 201
+            body = JSON.parse(response.body)
             puts "Preview created : #{ROOT_URL + '/preview/' + body['id']} (expires at #{body['expires_at']})"
-          elsif response.code == 422
-            display_invalid_definition(body)
           else
-            display_generic_error(body)
+            display_error(response)
           end
         rescue HTTP::Error => error
           display_http_error(error)
