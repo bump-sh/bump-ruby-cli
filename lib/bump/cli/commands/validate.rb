@@ -1,4 +1,3 @@
-require 'open-uri'
 require 'base64'
 
 module Bump

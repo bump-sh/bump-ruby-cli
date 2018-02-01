@@ -1,5 +1,3 @@
-require 'open-uri'
-
 module Bump
   class CLI
     module Commands
