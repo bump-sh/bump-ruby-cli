@@ -10,8 +10,8 @@ module Bump
         option :format, default: "yaml", values: %w[yaml json], desc: "Format of the definition"
 
         def call(**options)
-          id, token = options.fetch(:authentication).split(':')
-          response = HTTP.headers(headers(token)).post(API_URL + "/docs/#{id}/versions", body: body(options).to_json)
+          authentication = authentication_service(options)
+          response = HTTP.headers(headers(authentication)).post(API_URL + "/docs/#{authentication.id}/versions", body: body(options).to_json)
 
           if response.code == 201
             puts "New version has been successfuly deployed."
@@ -26,8 +26,8 @@ module Bump
 
         private
 
-        def headers(token)
-          default_headers.merge("Authorization" => "Basic #{Base64.strict_encode64(token + ':')}")
+        def headers(authentication)
+          default_headers.merge(authentication.as_headers)
         end
 
         def body(options)

@@ -6,6 +6,10 @@ module Bump
       class Base < Hanami::CLI::Command
         private
 
+        def authentication_service(options)
+          Authentication.new(options.fetch(:authentication))
+        end
+
         def headers(options)
           default_headers
         end

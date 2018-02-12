@@ -18,6 +18,7 @@ module Bump
   end
 end
 
+require "bump/cli/authentication"
 require "bump/cli/commands/base"
 require "bump/cli/commands/deploy"
 require "bump/cli/commands/preview"
