@@ -7,7 +7,9 @@ module Bump
         option :format, default: "yaml", values: %w[yaml json], desc: "Format of the definition"
 
         def call(**options)
-          response = HTTP.headers(headers(options)).post(API_URL + "/previews", body: body(options).to_json)
+          response = HTTP
+            .headers(headers)
+            .post(API_URL + "/previews", body: body(options).to_json)
 
           if response.code == 201
             body = JSON.parse(response.body)
