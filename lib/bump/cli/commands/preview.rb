@@ -23,10 +23,8 @@ module Bump
 
         def body(options)
           {
-            preview: {
-              definition: open(options.fetch(:file)).read,
-              format: options.fetch(:format)
-            }
+            definition: open(options.fetch(:file)).read,
+            format: options.fetch(:format)
           }
         end
       end

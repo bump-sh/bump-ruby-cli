@@ -13,10 +13,8 @@ describe Bump::CLI::Commands::Preview do
         'Content-Type': 'application/json'
       },
       body: {
-        preview: {
-          definition: 'body',
-          format: 'yaml'
-        }
+        definition: 'body',
+        format: 'yaml'
       }
     )
   end

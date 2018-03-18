@@ -10,10 +10,8 @@ describe Bump::CLI::Commands::Deploy do
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/docs/1/versions').with(
       body: {
-        version: {
-          definition: 'body',
-          format: 'yaml'
-        }
+        definition: 'body',
+        format: 'yaml'
       }
     )
   end
