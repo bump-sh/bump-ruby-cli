@@ -6,11 +6,11 @@ module Bump
       class Deploy < Base
         desc "Creates a new version"
         argument :file, required: true, desc: "Path or URL to your API documentation file. Only OpenApi 2.0 (Swagger) specification is currently supported."
-        option :id, desc: "Documentation public id"
-        option :token, desc: "Documentation private token"
+        option :id, default: ENV.fetch("BUMP_ID", ""), desc: "Documentation public id"
+        option :token, default: ENV.fetch("BUMP_TOKEN", ""), desc: "Documentation private token"
         option :format, default: "yaml", values: %w[yaml json], desc: "Format of the definition"
 
-        def call(file:, format:, id: "", token: "")
+        def call(file:, format:, id:, token:)
           response = HTTP
             .headers(headers(token: token))
             .post(API_URL + "/docs/#{id}/versions", body: body(file, format).to_json)
