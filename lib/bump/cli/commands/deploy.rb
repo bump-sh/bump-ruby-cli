@@ -4,7 +4,7 @@ module Bump
   class CLI
     module Commands
       class Deploy < Base
-        desc "Creates a new version"
+        desc "Create a new version"
         argument :file, required: true, desc: "Path or URL to your API documentation file. Only OpenApi 2.0 (Swagger) specification is currently supported."
         option :id, default: ENV.fetch("BUMP_ID", ""), desc: "Documentation public id"
         option :token, default: ENV.fetch("BUMP_TOKEN", ""), desc: "Documentation private token"
