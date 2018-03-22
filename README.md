@@ -1,8 +1,6 @@
 # Bump::CLI
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/bump/cli`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+The `bump-cli` gem provides a simple command line access to the Bump (https://bump.sh) API.
 
 ## Installation
 
@@ -22,7 +20,27 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+By default, `bump-cli` considers files as `yaml` ones. If you work with JSON definitions, you need to specify the format for all the commands using `--format json`.
+
+The doc `id` and `token` used below can be found in your documentation settings page on https://bump.sh. Note that you can replace the options by environments variables: `--id` can be replaced by `BUMP_ID`, and `--token` can by replaced by `BUMP_TOKEN`. This is useful to keep your private token secret.
+
+### Preview
+
+You can preview your documentation by calling the `preview` command. A temporary preview will be created, with a unique URL. This preview will be available for 30 minutes. You don't need any credentials to use this command.
+
+    $ bundle exec bump preview path/to/your/openapi.yml
+
+### Validate
+
+Validate your file against the OpenApi specification.
+
+    $ bundle exec bump validate path/to/your/openapi.yml --id DOC_ID --token DOC_TOKEN
+
+### Deploy
+
+Deploy the file as the current version of the documentation.
+
+    $ bundle exec bump deploy path/to/your/openapi.yml --id DOC_ID --token DOC_TOKEN
 
 ## Development
 
