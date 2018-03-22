@@ -16,7 +16,7 @@ module Bump
             .post(API_URL + "/docs/#{id}/versions", body: body(file, format).to_json)
 
           if response.code == 201
-            puts "New version has been successfuly deployed."
+            puts "New version has been successfully deployed."
           elsif response.code == 204
             puts "Version was already deployed."
           else
