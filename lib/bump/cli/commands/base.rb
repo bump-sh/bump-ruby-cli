@@ -6,6 +6,12 @@ module Bump
       class Base < Hanami::CLI::Command
         private
 
+        def with_errors_rescued
+          yield
+        rescue HTTP::Error, Errno::ENOENT, SocketError => error
+          abort "Error: #{error.message}"
+        end
+
         def headers(token: '')
           if token
             {
@@ -39,10 +45,6 @@ module Bump
             puts "> #{error}"
           end
           abort
-        end
-
-        def display_http_error(error)
-          abort "#{error.class}: #{error.message}"
         end
       end
     end

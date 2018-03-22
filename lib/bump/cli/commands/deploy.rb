@@ -11,19 +11,19 @@ module Bump
         option :format, default: "yaml", values: %w[yaml json], desc: "Format of the definition"
 
         def call(file:, format:, id:, token:)
-          response = HTTP
-            .headers(headers(token: token))
-            .post(API_URL + "/docs/#{id}/versions", body: body(file, format).to_json)
+          with_errors_rescued do
+            response = HTTP
+              .headers(headers(token: token))
+              .post(API_URL + "/docs/#{id}/versions", body: body(file, format).to_json)
 
-          if response.code == 201
-            puts "New version has been successfully deployed."
-          elsif response.code == 204
-            puts "Version was already deployed."
-          else
-            display_error(response)
+            if response.code == 201
+              puts "New version has been successfully deployed."
+            elsif response.code == 204
+              puts "Version was already deployed."
+            else
+              display_error(response)
+            end
           end
-        rescue HTTP::Error => error
-          display_http_error(error)
         end
 
         private
