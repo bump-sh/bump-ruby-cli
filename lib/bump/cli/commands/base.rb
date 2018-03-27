@@ -6,6 +6,13 @@ module Bump
       class Base < Hanami::CLI::Command
         private
 
+        def body(file, specification)
+          {
+            definition: open(file).read,
+            specification: specification
+          }
+        end
+
         def with_errors_rescued
           yield
         rescue HTTP::Error, Errno::ENOENT, SocketError => error

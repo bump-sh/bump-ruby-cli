@@ -4,13 +4,13 @@ module Bump
       class Preview < Base
         desc "Create a documentation preview for the given file"
         argument :file, required: true, desc: "Path or URL to your API documentation file. Only OpenApi 2.0 (Swagger) specification is currently supported."
-        option :format, default: "yaml", values: %w[yaml json], desc: "Format of the definition"
+        option :specification, default: 'openapi/v2/yaml', values: %w[openapi/v2/json openapi/v2/yaml], desc: "Specification of the definition"
 
-        def call(**options)
+        def call(file:, specification:)
           with_errors_rescued do
             response = HTTP
               .headers(headers)
-              .post(API_URL + "/previews", body: body(options).to_json)
+              .post(API_URL + "/previews", body: body(file, specification).to_json)
 
             if response.code == 201
               body = JSON.parse(response.body)
@@ -19,15 +19,6 @@ module Bump
               display_error(response)
             end
           end
-        end
-
-        private
-
-        def body(options)
-          {
-            definition: open(options.fetch(:file)).read,
-            format: options.fetch(:format)
-          }
         end
       end
     end

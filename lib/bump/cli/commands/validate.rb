@@ -8,13 +8,13 @@ module Bump
         argument :file, required: true, desc: "Path or URL to your API documentation file. Only OpenApi 2.0 (Swagger) specification is currently supported."
         option :id, default: ENV.fetch("BUMP_ID", ""), desc: "Documentation public id"
         option :token, default: ENV.fetch("BUMP_TOKEN", ""), desc: "Documentation private token"
-        option :format, default: "yaml", values: %w[yaml json], desc: "Format of the definition"
+        option :specification, default: 'openapi/v2/yaml', values: %w[openapi/v2/json openapi/v2/yaml], desc: "Specification of the definition"
 
-        def call(file:, format:, id:, token:)
+        def call(file:, specification:, id:, token:)
           with_errors_rescued do
             response = HTTP
               .headers(headers(token: token))
-              .post(API_URL + "/docs/#{id}/validations", body: body(file, format).to_json)
+              .post(API_URL + "/docs/#{id}/validations", body: body(file, specification).to_json)
 
             if response.code == 200
               puts "Definition is valid."
@@ -22,15 +22,6 @@ module Bump
               display_error(response)
             end
           end
-        end
-
-        private
-
-        def body(file, format)
-          {
-            definition: open(file).read,
-            format: format
-          }
         end
       end
     end
