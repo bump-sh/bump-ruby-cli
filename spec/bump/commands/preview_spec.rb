@@ -5,7 +5,7 @@ describe Bump::CLI::Commands::Preview do
     stub_bump_api_create_preview('previews/post_success.http')
 
     expect do
-      new_command.call(file: 'path/to/file', format: 'yaml')
+      new_command.call(file: 'path/to/file', specification: 'openapi/v3/yaml')
     end.to output(/Preview created/).to_stdout
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/previews').with(
@@ -14,7 +14,7 @@ describe Bump::CLI::Commands::Preview do
       },
       body: {
         definition: 'body',
-        format: 'yaml'
+        specification: 'openapi/v3/yaml'
       }
     )
   end
@@ -24,7 +24,7 @@ describe Bump::CLI::Commands::Preview do
 
     expect do
       begin
-        new_command.call(file: 'path/to/file', format: 'yaml')
+        new_command.call(file: 'path/to/file', specification: 'openapi/v2/yaml')
       rescue SystemExit; end
     end.to output(/Definition is not valid/).to_stdout
 
@@ -36,7 +36,7 @@ describe Bump::CLI::Commands::Preview do
 
     expect do
       begin
-        new_command.call(file: 'path/to/file', format: 'yaml')
+        new_command.call(file: 'path/to/file', specification: 'openapi/v2/yaml')
       rescue SystemExit; end
     end.to output(/Oops. Something bad happened./).to_stderr
 

@@ -5,13 +5,13 @@ describe Bump::CLI::Commands::Deploy do
     stub_bump_api_validate('versions/post_success.http')
 
     expect do
-      new_command.call(id: '1', token:'token', file: 'path/to/file', format: 'yaml')
+      new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'openapi/v2/json')
     end.to output(/New version has been successfully deployed/).to_stdout
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/docs/1/versions').with(
       body: {
         definition: 'body',
-        format: 'yaml'
+        specification: 'openapi/v2/json'
       }
     )
   end
@@ -21,7 +21,7 @@ describe Bump::CLI::Commands::Deploy do
 
     expect do
       begin
-        new_command.call(id: '1', token: 'token', file: 'path/to/file', format: 'yaml')
+        new_command.call(id: '1', token: 'token', file: 'path/to/file', specification: 'openapi/v2/yaml')
       rescue SystemExit; end
     end.to output(/Definition is not valid/).to_stdout
   end
@@ -31,7 +31,7 @@ describe Bump::CLI::Commands::Deploy do
 
     expect do
       begin
-        new_command.call(id: '1', token: 'token', file: 'path/to/file', format: 'yaml')
+        new_command.call(id: '1', token: 'token', file: 'path/to/file', specification: 'openapi/v2/yaml')
       rescue SystemExit; end
     end.to output(/Unknown error/).to_stderr
   end
