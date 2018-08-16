@@ -4,7 +4,7 @@ module Bump
       class Preview < Base
         desc "Create a documentation preview for the given file"
         argument :file, required: true, desc: "Path or URL to your API documentation file. Only OpenApi 2.0 (Swagger) specification is currently supported."
-        option :specification, default: 'openapi/v2/yaml', values: %w[openapi/v2/json openapi/v2/yaml], desc: "Specification of the definition"
+        option :specification, default: 'openapi/v2/yaml', desc: "Specification of the definition"
 
         def call(file:, specification:)
           with_errors_rescued do
