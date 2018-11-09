@@ -26,7 +26,7 @@ describe Bump::CLI::Commands::Preview do
       begin
         new_command.call(file: 'path/to/file', specification: 'openapi/v2/yaml')
       rescue SystemExit; end
-    end.to output(/Definition is not valid/).to_stdout
+    end.to output(/Invalid request/).to_stderr
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/previews')
   end

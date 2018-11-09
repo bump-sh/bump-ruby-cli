@@ -11,7 +11,11 @@ describe Bump::CLI::Commands::Base do
 
   class Bump::CLI::Commands::BasePost < Bump::CLI::Commands::Base
     def call(url:, body:, token: nil)
-      post(url: url, body: body, token: token)
+      response = post(url: url, body: body, token: token)
+
+      if response.status > 400
+        display_error(response)
+      end
     end
   end
 
@@ -64,5 +68,33 @@ describe Bump::CLI::Commands::Base do
         end
       rescue SystemExit; end
     end.to output(/Oops/).to_stderr
+  end
+
+  it 'handles validation error' do
+    command = Bump::CLI::Commands::BasePost.new(command_name: 'Fake')
+    stub_request(:post, "http://somewhere/").to_return(
+      status: 422,
+      body: { 'errors' =>  { 'raw_definition' => ['This is an error'] } }.to_json
+    )
+
+    expect do
+      begin
+        command.call(url: 'http://somewhere', body: 'hello')
+      rescue SystemExit; end
+    end.to output(/This is an error/).to_stderr
+  end
+
+  it 'handles validation errors even when backend returns shit' do
+    command = Bump::CLI::Commands::BasePost.new(command_name: 'Fake')
+    stub_request(:post, "http://somewhere/").to_return(
+      status: 422,
+      body: { 'message' => 'Invalid', 'errors' => { 'attribute' => 'message' } }.to_json
+    )
+
+    expect do
+      begin
+        command.call(url: 'http://somewhere', body: 'hello')
+      rescue SystemExit; end
+    end.to output(/Invalid request:/).to_stderr
   end
 end

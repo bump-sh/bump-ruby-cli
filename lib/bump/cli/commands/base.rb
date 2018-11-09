@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'byebug'
 
 module Bump
   class CLI
@@ -43,7 +44,7 @@ module Bump
         def display_error(response)
           if response.code == 422
             body = JSON.parse(response.body)
-            display_invalid_definition(body)
+            display_validation_errors(body)
           elsif response.code == 401
             abort "Invalid credentials (status: 401)"
           else
@@ -54,12 +55,29 @@ module Bump
           abort "Unknown error (status: #{response.code})"
         end
 
-        def display_invalid_definition(body)
-          puts "Definition is not valid:"
-          body["errors"]["raw_definition"].each do |error|
-            puts "> #{error}"
+        def display_validation_errors(body)
+          errors = body.dig('errors') || []
+
+          $stderr.puts "Invalid request:"
+          errors.each do |attribute, messages|
+            display_attribute_errors(attribute, messages)
           end
+
           abort
+        end
+
+        def display_attribute_errors(attribute, messages)
+          case
+          when messages.is_a?(String)
+            $stderr.puts "- #{attribute}: #{messages}"
+          when messages.is_a?(Array) && messages.count == 1
+            $stderr.puts "- #{attribute}: #{messages[0]}"
+          when messages.is_a?(Array)
+            $stderr.puts "- #{attribute}:"
+            messages.each do |message|
+              $stderr.puts " #{message}"
+            end
+          end
         end
       end
     end

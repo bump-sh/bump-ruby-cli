@@ -23,7 +23,7 @@ describe Bump::CLI::Commands::Deploy do
       begin
         new_command.call(id: '1', token: 'token', file: 'path/to/file', specification: 'openapi/v2/yaml')
       rescue SystemExit; end
-    end.to output(/Definition is not valid/).to_stdout
+    end.to output(/Invalid request/).to_stderr
   end
 
   it 'displays a generic error message in case of unknown error' do
