@@ -4,6 +4,8 @@ module Bump
   class CLI
     module Commands
       class Base < Hanami::CLI::Command
+        USER_AGENT = "bump-cli/#{VERSION}".freeze
+
         private
 
         def post(url:, body:, token: nil)
@@ -26,16 +28,16 @@ module Bump
         end
 
         def headers(token: '')
+          headers = {
+            'Content-Type' => 'application/json',
+            'User-Agent' => USER_AGENT
+          }
+
           if token
-            {
-              "Content-Type" => "application/json",
-              "Authorization" => "Basic #{Base64.strict_encode64(token + ':')}"
-            }
-          else
-            {
-              "Content-Type" => "application/json"
-            }
+            headers['Authorization'] = "Basic #{Base64.strict_encode64(token + ':')}"
           end
+
+          headers
         end
 
         def display_error(response)
