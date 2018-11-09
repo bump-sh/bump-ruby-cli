@@ -12,9 +12,11 @@ module Bump
 
         def call(file:, specification:, id:, token:)
           with_errors_rescued do
-            response = HTTP
-              .headers(headers(token: token))
-              .post(API_URL + "/docs/#{id}/versions", body: body(file, specification).to_json)
+            response = post(
+              url: API_URL + "/docs/#{id}/versions",
+              body: body(file, specification).to_json,
+              token: token
+            )
 
             if response.code == 201
               puts "New version has been successfully deployed."

@@ -6,6 +6,12 @@ module Bump
       class Base < Hanami::CLI::Command
         private
 
+        def post(url:, body:, token: nil)
+          HTTP
+            .headers(headers(token: token))
+            .post(url, body: body)
+        end
+
         def body(file, specification)
           {
             definition: open(file).read,

@@ -12,9 +12,11 @@ module Bump
 
         def call(file:, specification:, id:, token:)
           with_errors_rescued do
-            response = HTTP
-              .headers(headers(token: token))
-              .post(API_URL + "/docs/#{id}/validations", body: body(file, specification).to_json)
+            response = post(
+              url: API_URL + "/docs/#{id}/validations",
+              body: body(file, specification).to_json,
+              token: token
+            )
 
             if response.code == 200
               puts "Definition is valid."

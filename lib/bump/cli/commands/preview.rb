@@ -8,9 +8,10 @@ module Bump
 
         def call(file:, specification:)
           with_errors_rescued do
-            response = HTTP
-              .headers(headers)
-              .post(API_URL + "/previews", body: body(file, specification).to_json)
+            response = post(
+              url: API_URL + "/previews",
+              body: body(file, specification).to_json
+            )
 
             if response.code == 201
               body = JSON.parse(response.body)
