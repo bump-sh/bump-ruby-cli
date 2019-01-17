@@ -1,5 +1,4 @@
 require 'open-uri'
-require 'byebug'
 
 module Bump
   class CLI
