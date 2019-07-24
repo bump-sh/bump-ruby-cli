@@ -5,7 +5,7 @@ module Bump
     module Commands
       class Validate < Base
         desc "Validate a given file against its schema definition"
-        argument :file, required: true, desc: "Path or URL to your API documentation file. Only OpenApi 2.0 (Swagger) specification is currently supported."
+        argument :file, required: true, desc: "Path or URL to your API documentation file. OpenApi 2.0 and 3.0 specifications are currently supported."
         option :id, default: ENV.fetch("BUMP_ID", ""), desc: "Documentation public id"
         option :token, default: ENV.fetch("BUMP_TOKEN", ""), desc: "Documentation private token"
         option :specification, desc: "Specification of the definition"
