@@ -27,12 +27,12 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.3'
 
   spec.add_dependency "hanami-cli", '~> 0'
-  spec.add_dependency "http", '~> 3'
+  spec.add_dependency "http", '>= 3'
 
-  spec.add_development_dependency "bundler", "~> 1.15"
-  spec.add_development_dependency "byebug", "~> 9"
+  spec.add_development_dependency "bundler", "~> 1"
+  spec.add_development_dependency "byebug", "~> 11"
   spec.add_development_dependency "climate_control", '~> 0'
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rake", "~> 13"
   spec.add_development_dependency "rspec", "~> 3"
   spec.add_development_dependency "webmock", "~> 3"
 end
