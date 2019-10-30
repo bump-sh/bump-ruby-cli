@@ -3,7 +3,7 @@ module Bump
     module Commands
       class Preview < Base
         desc "Create a documentation preview for the given file"
-        argument :file, required: true, desc: "Path or URL to your API documentation file. OpenApi 2.0 and 3.0 specifications are currently supported."
+        argument :file, required: true, desc: "Path or URL to your API documentation file. OpenAPI (2.0 to 3.0.2) and AsyncAPI (2.0) specifications are currently supported."
         option :specification, desc: "Specification of the definition"
 
         def call(file:, specification: nil)
