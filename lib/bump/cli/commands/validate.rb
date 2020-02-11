@@ -9,12 +9,13 @@ module Bump
         option :id, default: ENV.fetch("BUMP_ID", ""), desc: "Documentation public id"
         option :token, default: ENV.fetch("BUMP_TOKEN", ""), desc: "Documentation private token"
         option :specification, desc: "Specification of the definition"
+        option :validation, desc: "Validation mode", values: %w(basic strict), default: 'basic'
 
-        def call(file:, id:, token:, specification: nil)
+        def call(file:, id:, token:, validation:, specification: nil)
           with_errors_rescued do
             response = post(
               url: API_URL + "/docs/#{id}/validations",
-              body: body(file, specification).to_json,
+              body: body(file, specification, validation).to_json,
               token: token
             )
 

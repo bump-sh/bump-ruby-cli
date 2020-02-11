@@ -5,13 +5,14 @@ describe Bump::CLI::Commands::Validate do
     stub_bump_api_validate('validations/post_success.http')
 
     expect do
-      new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'api-blueprint/v1a9')
+      new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'api-blueprint/v1a9', validation: 'strict')
     end.to output(/Definition is valid/).to_stdout
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/docs/1/validations').with(
       body: {
         definition: 'body',
-        specification: 'api-blueprint/v1a9'
+        specification: 'api-blueprint/v1a9',
+        validation: 'strict'
       }
     )
   end
@@ -21,7 +22,7 @@ describe Bump::CLI::Commands::Validate do
 
     expect do
       begin
-        new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'openapi/v2/yaml')
+        new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'openapi/v2/yaml', validation: 'basic')
       rescue SystemExit; end
     end.to output(/Invalid request/).to_stderr
   end
@@ -31,7 +32,7 @@ describe Bump::CLI::Commands::Validate do
 
     expect do
       begin
-        new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'openapi/v2/yaml')
+        new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'openapi/v2/yaml', validation: 'basic')
       rescue SystemExit; end
     end.to output(/Unknown error/).to_stderr
   end

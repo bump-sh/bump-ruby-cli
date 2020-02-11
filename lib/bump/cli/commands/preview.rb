@@ -5,12 +5,13 @@ module Bump
         desc "Create a documentation preview for the given file"
         argument :file, required: true, desc: "Path or URL to your API documentation file. OpenAPI (2.0 to 3.0.2) and AsyncAPI (2.0) specifications are currently supported."
         option :specification, desc: "Specification of the definition"
+        option :validation, desc: "Validation mode", values: %w(basic strict), default: 'basic'
 
-        def call(file:, specification: nil)
+        def call(file:, validation:, specification: nil)
           with_errors_rescued do
             response = post(
               url: API_URL + "/previews",
-              body: body(file, specification).to_json
+              body: body(file, specification, validation).to_json
             )
 
             if response.code == 201

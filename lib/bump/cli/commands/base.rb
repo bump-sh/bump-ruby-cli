@@ -14,10 +14,11 @@ module Bump
             .post(url, body: body)
         end
 
-        def body(file, specification)
+        def body(file, specification, validation)
           {
             definition: open(file).read,
-            specification: specification
+            specification: specification,
+            validation: validation
           }
         end
 
