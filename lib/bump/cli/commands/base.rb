@@ -20,14 +20,16 @@ module Bump
             definition: open(file).read,
             specification: options[:specification],
             validation: options[:validation],
-          }.merge(documentation(options))
+          }.merge(documentation_or_hub(options))
         end
 
-        def documentation(options)
+        def documentation_or_hub(options)
           result = {}
 
           result[:documentation_id] = options[:documentation] if documentation_uuid?(options)
           result[:documentation_slug] = options[:documentation] if documentation_slug?(options)
+          result[:hub_id] = options[:hub] if hub_uuid?(options)
+          result[:hub_slug] = options[:hub] if hub_slug?(options)
 
           result
         end
@@ -38,6 +40,14 @@ module Bump
 
         def documentation_slug?(options)
           !options[:documentation].nil? && !documentation_uuid?(options)
+        end
+
+        def hub_uuid?(options)
+          Bump::CLI::Tools::UUID.valid?(options[:hub])
+        end
+
+        def hub_slug?(options)
+          !options[:hub].nil? && !hub_uuid?(options)
         end
 
         def with_errors_rescued
