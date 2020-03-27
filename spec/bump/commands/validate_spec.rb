@@ -8,8 +8,9 @@ describe Bump::CLI::Commands::Validate do
       new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'api-blueprint/v1a9', validation: 'strict')
     end.to output(/Definition is valid/).to_stdout
 
-    expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/docs/1/validations').with(
+    expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/validations').with(
       body: {
+        documentation_id: '1',
         definition: 'body',
         specification: 'api-blueprint/v1a9',
         validation: 'strict'
