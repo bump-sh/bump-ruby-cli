@@ -5,16 +5,35 @@ describe Bump::CLI::Commands::Validate do
     stub_bump_api_validate('validations/post_success.http')
 
     expect do
-      new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'api-blueprint/v1a9', validation: 'strict')
+      new_command.call(
+        documentation: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
+        token:'token',
+        file: 'path/to/file',
+        specification: 'api-blueprint/v1a9',
+        validation: 'strict')
     end.to output(/Definition is valid/).to_stdout
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/validations').with(
       body: {
-        documentation_id: '1',
+        documentation_id: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
         definition: 'body',
         specification: 'api-blueprint/v1a9',
         validation: 'strict'
       }
+    )
+  end
+
+  it 'validates with a documentation slug' do
+    stub_bump_api_validate('validations/post_success.http')
+
+    expect do
+      new_command.call(documentation: 'a-slug', file: 'path/to/file')
+    end.to output(/Definition is valid/).to_stdout
+
+    expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/validations').with(
+      body: hash_including(
+        documentation_slug: 'a-slug'
+      )
     )
   end
 

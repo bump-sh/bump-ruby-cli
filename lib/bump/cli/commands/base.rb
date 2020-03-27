@@ -15,13 +15,29 @@ module Bump
             .post(url, body: body)
         end
 
-        def body(file, options)
+        def body(file, **options)
           {
-            documentation_id: options[:id],
             definition: open(file).read,
             specification: options[:specification],
             validation: options[:validation],
-          }.compact
+          }.merge(documentation(options))
+        end
+
+        def documentation(options)
+          result = {}
+
+          result[:documentation_id] = options[:documentation] if documentation_uuid?(options)
+          result[:documentation_slug] = options[:documentation] if documentation_slug?(options)
+
+          result
+        end
+
+        def documentation_uuid?(options)
+          Bump::CLI::Tools::UUID.valid?(options[:documentation])
+        end
+
+        def documentation_slug?(options)
+          !options[:documentation].nil? && !documentation_uuid?(options)
         end
 
         def with_errors_rescued
