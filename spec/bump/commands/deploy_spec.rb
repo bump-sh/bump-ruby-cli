@@ -5,16 +5,35 @@ describe Bump::CLI::Commands::Deploy do
     stub_bump_api_validate('versions/post_success.http')
 
     expect do
-      new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'openapi/v2/json', validation: 'strict')
+      new_command.call(
+        documentation: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
+        token:'token',
+        file: 'path/to/file',
+        specification: 'openapi/v2/json',
+        validation: 'strict')
     end.to output(/New version has been successfully deployed/).to_stdout
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/versions').with(
       body: {
-        documentation_id: '1',
+        documentation_id: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
         definition: 'body',
         specification: 'openapi/v2/json',
         validation: 'strict'
       }
+    )
+  end
+
+  it 'deploys with a documentation slug' do
+    stub_bump_api_validate('versions/post_success.http')
+
+    expect do
+      new_command.call(documentation: 'a-slug', file: 'path/to/file')
+    end.to output(/New version has been successfully deployed/).to_stdout
+
+    expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/versions').with(
+      body: hash_including(
+        documentation_slug: 'a-slug'
+      )
     )
   end
 
