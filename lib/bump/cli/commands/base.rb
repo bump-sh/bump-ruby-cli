@@ -20,7 +20,8 @@ module Bump
             definition: open(file).read,
             specification: options[:specification],
             validation: options[:validation],
-          }.merge(documentation_or_hub(options))
+            auto_create_documentation: options[:'auto-create']
+          }.merge(documentation_or_hub(options)).compact
         end
 
         def documentation_or_hub(options)
