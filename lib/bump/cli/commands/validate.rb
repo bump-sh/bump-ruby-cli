@@ -11,6 +11,7 @@ module Bump
         option :token, default: ENV.fetch("BUMP_TOKEN", ""), desc: "Documentation or Hub token"
         option :specification, desc: "Specification of the definition"
         option :validation, desc: "Validation mode", values: %w(basic strict), default: 'basic'
+        option :'auto-create', type: :boolean, default: false, desc: 'Automatically create the documentation if needed (only available with a hub and when specifying a slug for documentation)'
 
         def call(file:, **options)
           with_errors_rescued do

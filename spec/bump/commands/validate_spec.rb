@@ -11,7 +11,8 @@ describe Bump::CLI::Commands::Validate do
         token:'token',
         file: 'path/to/file',
         specification: 'api-blueprint/v1a9',
-        validation: 'strict')
+        validation: 'strict',
+        'auto-create': true)
     end.to output(/Definition is valid/).to_stdout
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/validations').with(
@@ -20,7 +21,8 @@ describe Bump::CLI::Commands::Validate do
         hub_id: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
         definition: 'body',
         specification: 'api-blueprint/v1a9',
-        validation: 'strict'
+        validation: 'strict',
+        auto_create_documentation: true
       }
     )
   end

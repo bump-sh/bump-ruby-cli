@@ -11,7 +11,8 @@ describe Bump::CLI::Commands::Deploy do
         token:'token',
         file: 'path/to/file',
         specification: 'openapi/v2/json',
-        validation: 'strict')
+        validation: 'strict',
+        'auto-create': true)
     end.to output(/New version has been successfully deployed/).to_stdout
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/versions').with(
@@ -20,7 +21,8 @@ describe Bump::CLI::Commands::Deploy do
         hub_id: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
         definition: 'body',
         specification: 'openapi/v2/json',
-        validation: 'strict'
+        validation: 'strict',
+        auto_create_documentation: true
       }
     )
   end
