@@ -1,4 +1,5 @@
 .byebug_history
+.ruby-version
 /.bundle/
 /.yardoc
 /Gemfile.lock
