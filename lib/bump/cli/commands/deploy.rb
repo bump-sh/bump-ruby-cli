@@ -11,12 +11,12 @@ module Bump
         option :specification, desc: "Specification of the definition"
         option :validation, desc: "Validation mode", values: %w(basic strict), default: 'basic'
 
-        def call(file:, id:, token:, validation:, specification: nil)
+        def call(file:, **options)
           with_errors_rescued do
             response = post(
-              url: API_URL + "/docs/#{id}/versions",
-              body: body(file, specification, validation).to_json,
-              token: token
+              url: API_URL + "/versions",
+              body: body(file, options).to_json,
+              token: options[:token]
             )
 
             if response.code == 201

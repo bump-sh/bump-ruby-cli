@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'bump/cli/tools/uuid'
 
 module Bump
   class CLI
@@ -14,12 +15,13 @@ module Bump
             .post(url, body: body)
         end
 
-        def body(file, specification, validation)
+        def body(file, options)
           {
+            documentation_id: options[:id],
             definition: open(file).read,
-            specification: specification,
-            validation: validation
-          }
+            specification: options[:specification],
+            validation: options[:validation],
+          }.compact
         end
 
         def with_errors_rescued

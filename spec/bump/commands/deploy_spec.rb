@@ -8,8 +8,9 @@ describe Bump::CLI::Commands::Deploy do
       new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'openapi/v2/json', validation: 'strict')
     end.to output(/New version has been successfully deployed/).to_stdout
 
-    expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/docs/1/versions').with(
+    expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/versions').with(
       body: {
+        documentation_id: '1',
         definition: 'body',
         specification: 'openapi/v2/json',
         validation: 'strict'
