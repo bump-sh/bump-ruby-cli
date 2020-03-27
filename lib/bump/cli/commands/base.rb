@@ -16,12 +16,18 @@ module Bump
         end
 
         def body(file, **options)
-          {
-            definition: open(file).read,
-            specification: options[:specification],
-            validation: options[:validation],
-            auto_create_documentation: options[:'auto-create']
-          }.merge(documentation_or_hub(options)).compact
+          compact(
+            {
+              definition: open(file).read,
+              specification: options[:specification],
+              validation: options[:validation],
+              auto_create_documentation: options[:'auto-create']
+            }.merge(documentation_or_hub(options))
+          )
+        end
+
+        def compact(hash)
+          hash.delete_if { |key, value| value.nil? }
         end
 
         def documentation_or_hub(options)
