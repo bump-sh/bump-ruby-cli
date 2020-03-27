@@ -46,6 +46,23 @@ describe Bump::CLI::Commands::Validate do
     )
   end
 
+  it 'supports deprecated id option' do
+    stub_bump_api_validate('validations/post_success.http')
+
+    expect do
+      new_command.call(
+        id: 'old-school-id',
+        file: 'path/to/file'
+      )
+    end.to output(/Definition is valid/).to_stdout
+
+    expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/validations').with(
+      body: hash_including(
+        documentation_id: 'old-school-id'
+      )
+    )
+  end
+
   it 'displays the definition errors in case of unprocessable entity' do
     stub_bump_api_validate('validations/post_unprocessable_entity.http')
 

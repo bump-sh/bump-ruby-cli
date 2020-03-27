@@ -27,6 +27,7 @@ module Bump
         def documentation_or_hub(options)
           result = {}
 
+          result[:documentation_id] = options[:id] if !options[:id].nil?
           result[:documentation_id] = options[:documentation] if documentation_uuid?(options)
           result[:documentation_slug] = options[:documentation] if documentation_slug?(options)
           result[:hub_id] = options[:hub] if hub_uuid?(options)
