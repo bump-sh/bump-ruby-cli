@@ -30,6 +30,10 @@ jobs:
       - run:
           name: Run tests
           command: rake
+  build-2-5:
+    <<: *common-build
+    docker:
+      - image: circleci/ruby:2.5.0-node
   build-2-4:
     <<: *common-build
     docker:
@@ -44,5 +48,6 @@ workflows:
   build:
     jobs:
       - build-latest
+      - build-2-5
       - build-2-4
       - build-2-3
