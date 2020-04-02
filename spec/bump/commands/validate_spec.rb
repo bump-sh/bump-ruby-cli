@@ -7,6 +7,7 @@ describe Bump::CLI::Commands::Validate do
     expect do
       new_command.call(
         documentation: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
+        'documentation-name': 'Hello world',
         hub: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
         token:'token',
         file: 'path/to/file',
@@ -18,6 +19,7 @@ describe Bump::CLI::Commands::Validate do
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/validations').with(
       body: {
         documentation_id: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
+        documentation_name: 'Hello world',
         hub_id: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
         definition: 'body',
         specification: 'api-blueprint/v1a9',
