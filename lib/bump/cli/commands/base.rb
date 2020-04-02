@@ -33,13 +33,14 @@ module Bump
         def documentation_or_hub(options)
           result = {}
 
-          result[:documentation_id] = options[:id] if !options[:id].nil?
+          result[:documentation_id] = options[:id]
           result[:documentation_id] = options[:documentation] if documentation_uuid?(options)
           result[:documentation_slug] = options[:documentation] if documentation_slug?(options)
+          result[:documentation_name] = options[:'documentation-name']
           result[:hub_id] = options[:hub] if hub_uuid?(options)
           result[:hub_slug] = options[:hub] if hub_slug?(options)
 
-          result
+          compact(result)
         end
 
         def documentation_uuid?(options)
