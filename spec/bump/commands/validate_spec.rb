@@ -6,8 +6,8 @@ describe Bump::CLI::Commands::Validate do
 
     expect do
       new_command.call(
-        documentation: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
-        'documentation-name': 'Hello world',
+        doc: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
+        'doc-name': 'Hello world',
         hub: 'aaaa0000-bb11-cc22-dd33-eeeeee444444',
         token:'token',
         file: 'path/to/file',
@@ -34,7 +34,7 @@ describe Bump::CLI::Commands::Validate do
 
     expect do
       new_command.call(
-        documentation: 'documentation-slug',
+        doc: 'documentation-slug',
         hub: 'hub-slug',
         file: 'path/to/file'
       )
