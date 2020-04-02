@@ -34,9 +34,9 @@ module Bump
           result = {}
 
           result[:documentation_id] = options[:id]
-          result[:documentation_id] = options[:documentation] if documentation_uuid?(options)
-          result[:documentation_slug] = options[:documentation] if documentation_slug?(options)
-          result[:documentation_name] = options[:'documentation-name']
+          result[:documentation_id] = options[:doc] if documentation_uuid?(options)
+          result[:documentation_slug] = options[:doc] if documentation_slug?(options)
+          result[:documentation_name] = options[:'doc-name']
           result[:hub_id] = options[:hub] if hub_uuid?(options)
           result[:hub_slug] = options[:hub] if hub_slug?(options)
 
@@ -44,11 +44,11 @@ module Bump
         end
 
         def documentation_uuid?(options)
-          Bump::CLI::Tools::UUID.valid?(options[:documentation])
+          Bump::CLI::Tools::UUID.valid?(options[:doc])
         end
 
         def documentation_slug?(options)
-          !options[:documentation].nil? && !documentation_uuid?(options)
+          !options[:doc].nil? && !documentation_uuid?(options)
         end
 
         def hub_uuid?(options)
