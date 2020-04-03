@@ -48,7 +48,7 @@ describe Bump::CLI::Commands::Validate do
     )
   end
 
-  it 'supports deprecated id option' do
+  it 'supports deprecated id option and displays a warning' do
     stub_bump_api_validate('validations/post_success.http')
 
     expect do
@@ -56,7 +56,7 @@ describe Bump::CLI::Commands::Validate do
         id: 'old-school-id',
         file: 'path/to/file'
       )
-    end.to output(/Definition is valid/).to_stdout
+    end.to output(/[DEPRECATION WARNING]/).to_stdout
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/validations').with(
       body: hash_including(
@@ -70,7 +70,7 @@ describe Bump::CLI::Commands::Validate do
 
     expect do
       begin
-        new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'openapi/v2/yaml', validation: 'basic')
+        new_command.call(doc: '1', token:'token', file: 'path/to/file', specification: 'openapi/v2/yaml', validation: 'basic')
       rescue SystemExit; end
     end.to output(/Invalid request/).to_stderr
   end
@@ -80,7 +80,7 @@ describe Bump::CLI::Commands::Validate do
 
     expect do
       begin
-        new_command.call(id: '1', token:'token', file: 'path/to/file', specification: 'openapi/v2/yaml', validation: 'basic')
+        new_command.call(doc: '1', token:'token', file: 'path/to/file', specification: 'openapi/v2/yaml', validation: 'basic')
       rescue SystemExit; end
     end.to output(/Unknown error/).to_stderr
   end
