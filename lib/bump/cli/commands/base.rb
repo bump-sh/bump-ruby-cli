@@ -16,6 +16,8 @@ module Bump
         end
 
         def body(file, **options)
+          deprecation_warning(options)
+
           compact(
             {
               definition: open(file).read,
@@ -24,6 +26,12 @@ module Bump
               auto_create_documentation: options[:'auto-create']
             }.merge(documentation_or_hub(options))
           )
+        end
+
+        def deprecation_warning(options)
+          if !options[:id].nil?
+            puts "[DEPRECATION WARNING] --id option is deprecated. Please use --doc instead."
+          end
         end
 
         def compact(hash)
