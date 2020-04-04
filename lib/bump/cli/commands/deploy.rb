@@ -6,7 +6,7 @@ module Bump
       class Deploy < Base
         desc "Create a new version"
         argument :file, required: true, desc: "Path or URL to your API documentation file. OpenAPI (2.0 to 3.0.2) and AsyncAPI (2.0) specifications are currently supported."
-        option :id, default: ENV.fetch("BUMP_ID", ""), desc: "[DEPRECATION WARNING] Documentation id. Use `documentation` option instead"
+        option :id, default: ENV.fetch("BUMP_ID", ""), desc: "[DEPRECATED] Documentation id. Use `documentation` option instead"
         option :doc, default: ENV.fetch("BUMP_ID", ""), desc: "Documentation id or slug"
         option :'doc-name', desc: "Documentation name. Used with --auto-create flag."
         option :hub, default: ENV.fetch("BUMP_HUB_ID", ""), desc: "Hub id or slug"
