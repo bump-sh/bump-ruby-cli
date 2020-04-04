@@ -51,7 +51,7 @@ describe Bump::CLI::Commands::Preview do
   end
 
   def new_command
-    command = Bump::CLI::Commands::Preview.new(command_name: 'preview')
+    command = Bump::CLI::Commands::Preview.new
     allow(command).to receive(:open).and_return(double(read: 'body'))
     command
   end

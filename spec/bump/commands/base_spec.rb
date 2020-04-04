@@ -20,7 +20,7 @@ describe Bump::CLI::Commands::Base do
   end
 
   it 'calls the given url with correct headers and body' do
-    command = Bump::CLI::Commands::BasePost.new(command_name: 'Fake')
+    command = Bump::CLI::Commands::BasePost.new
     stub_request(:post, "http://somewhere/")
 
     command.call(url: 'http://somewhere', body: 'hello world', token: '4815162342')
@@ -35,7 +35,7 @@ describe Bump::CLI::Commands::Base do
   end
 
   it 'handles IO errors' do
-    command = Bump::CLI::Commands::BaseErrors.new(command_name: 'Fake')
+    command = Bump::CLI::Commands::BaseErrors.new
 
     expect do
       begin
@@ -47,7 +47,7 @@ describe Bump::CLI::Commands::Base do
   end
 
   it 'handles socket errors' do
-    command = Bump::CLI::Commands::BaseErrors.new(command_name: 'Fake')
+    command = Bump::CLI::Commands::BaseErrors.new
 
     expect do
       begin
@@ -59,7 +59,7 @@ describe Bump::CLI::Commands::Base do
   end
 
   it 'handles http errors' do
-    command = Bump::CLI::Commands::BaseErrors.new(command_name: 'Fake')
+    command = Bump::CLI::Commands::BaseErrors.new
 
     expect do
       begin
@@ -71,7 +71,7 @@ describe Bump::CLI::Commands::Base do
   end
 
   it 'handles validation error' do
-    command = Bump::CLI::Commands::BasePost.new(command_name: 'Fake')
+    command = Bump::CLI::Commands::BasePost.new
     stub_request(:post, "http://somewhere/").to_return(
       status: 422,
       body: { 'errors' =>  { 'raw_definition' => ['This is an error'] } }.to_json
@@ -85,7 +85,7 @@ describe Bump::CLI::Commands::Base do
   end
 
   it 'handles validation errors even when backend returns shit' do
-    command = Bump::CLI::Commands::BasePost.new(command_name: 'Fake')
+    command = Bump::CLI::Commands::BasePost.new
     stub_request(:post, "http://somewhere/").to_return(
       status: 422,
       body: { 'message' => 'Invalid', 'errors' => { 'attribute' => 'message' } }.to_json

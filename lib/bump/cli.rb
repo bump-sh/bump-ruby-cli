@@ -1,5 +1,5 @@
 require "bump/cli/version"
-require "hanami/cli"
+require "dry/cli"
 require "http"
 
 module Bump
@@ -9,11 +9,11 @@ module Bump
     API_URL = ROOT_URL + API_PATH
 
     def call(*args)
-      Hanami::CLI.new(Commands).call(*args)
+      Dry::CLI.new(Commands).call(*args)
     end
 
     module Commands
-      extend Hanami::CLI::Registry
+      extend Dry::CLI::Registry
     end
   end
 end
