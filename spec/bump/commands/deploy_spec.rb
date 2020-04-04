@@ -92,7 +92,7 @@ describe Bump::CLI::Commands::Deploy do
   end
 
   def new_command
-    command = Bump::CLI::Commands::Deploy.new(command_name: 'validate')
+    command = Bump::CLI::Commands::Deploy.new
     allow(command).to receive(:open).and_return(double(read: 'body'))
     command
   end

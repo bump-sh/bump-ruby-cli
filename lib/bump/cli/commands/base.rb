@@ -4,7 +4,7 @@ require 'bump/cli/tools/uuid'
 module Bump
   class CLI
     module Commands
-      class Base < Hanami::CLI::Command
+      class Base < Dry::CLI::Command
         USER_AGENT = "bump-cli/#{VERSION}".freeze
 
         private
