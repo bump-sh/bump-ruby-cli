@@ -29,9 +29,13 @@ module Bump
         end
 
         def deprecation_warning(options)
-          if !options[:id].nil?
+          if present?(options[:id])
             puts "[DEPRECATION WARNING] --id option is deprecated. Please use --doc instead."
           end
+        end
+
+        def present?(string)
+          !string.nil? && string != ''
         end
 
         def compact(hash)
