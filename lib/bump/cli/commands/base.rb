@@ -1,4 +1,4 @@
-require 'open-uri'
+require 'bump/cli/tools/definition'
 require 'bump/cli/tools/uuid'
 
 module Bump
@@ -20,12 +20,16 @@ module Bump
 
           compact(
             {
-              definition: open(file).read,
+              definition: prepare_file(file, options),
               specification: options[:specification],
               validation: options[:validation],
               auto_create_documentation: options[:'auto-create']
             }.merge(documentation_or_hub(options))
           )
+        end
+
+        def prepare_file(file, options)
+          Tools::Definition.new(file).prepare
         end
 
         def deprecation_warning(options)
