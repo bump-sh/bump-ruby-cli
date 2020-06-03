@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Bump::CLI::Tools::Definition do
+describe Bump::CLI::Definition do
   describe '#prepare' do
     it 'opens the file and reads its content' do
-      definition = Bump::CLI::Tools::Definition.new('path/to/file')
+      definition = Bump::CLI::Definition.new('path/to/file')
       file = spy(read: 'content')
       allow(definition).to receive(:open).and_return(file)
 
@@ -13,7 +13,7 @@ describe Bump::CLI::Tools::Definition do
     end
 
     it 'loads the definition and import references' do
-      definition = Bump::CLI::Tools::Definition.new('path/to/file', import_external_references: true)
+      definition = Bump::CLI::Definition.new('path/to/file', import_external_references: true)
       allow(definition).to receive(:parse_file_and_import_external_references).and_return('content')
 
       expect(definition.prepare).to eq('content')
@@ -21,14 +21,14 @@ describe Bump::CLI::Tools::Definition do
     end
 
     it 'loads YAML definition and serializes it correctly' do
-      definition = Bump::CLI::Tools::Definition.new('path/to/file', import_external_references: true)
+      definition = Bump::CLI::Definition.new('path/to/file', import_external_references: true)
       allow(definition).to receive(:read_file).and_return('property: value')
 
       expect(definition.prepare).to include('property: value')
     end
 
     it 'loads JSON definition and serializes it correctly' do
-      definition = Bump::CLI::Tools::Definition.new('path/to/file', import_external_references: true)
+      definition = Bump::CLI::Definition.new('path/to/file', import_external_references: true)
       allow(definition).to receive(:read_file).and_return('{"property": "value"}')
 
       expect(definition.prepare).to include('{"property":"value"}')

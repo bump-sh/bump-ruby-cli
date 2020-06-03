@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Bump::CLI::Tools::References do
+describe Bump::CLI::References do
   describe '#import!' do
     it 'it imports file system references' do
-      references = Bump::CLI::Tools::References.new({
+      references = Bump::CLI::References.new({
         'hello' => {
           '$ref' => 'some/filesystem/path'
         },
@@ -26,7 +26,7 @@ describe Bump::CLI::Tools::References do
     end
 
     it 'imports URI references' do
-      references = Bump::CLI::Tools::References.new({
+      references = Bump::CLI::References.new({
         'hello' => {
           '$ref' => 'https://some.url/path'
         }
@@ -40,7 +40,7 @@ describe Bump::CLI::Tools::References do
     end
 
     it 'ignores internal references' do
-      references = Bump::CLI::Tools::References.new({
+      references = Bump::CLI::References.new({
         'hello' => {
           '$ref' => '#/some/internal/path'
         }
@@ -51,7 +51,7 @@ describe Bump::CLI::Tools::References do
     end
 
     it 'supports relative paths' do
-      references = Bump::CLI::Tools::References.new({
+      references = Bump::CLI::References.new({
         'hello' => {
           '$ref' => 'some/internal/path.yml'
         }
@@ -64,7 +64,7 @@ describe Bump::CLI::Tools::References do
     end
 
     it 'supports paths with subpaths' do
-      references = Bump::CLI::Tools::References.new({
+      references = Bump::CLI::References.new({
         'hello' => {
           '$ref' => 'some/internal/path.yml#subpath/subsub'
         }
@@ -79,7 +79,7 @@ describe Bump::CLI::Tools::References do
     end
 
     it 'supports absolute paths' do
-      references = Bump::CLI::Tools::References.new({
+      references = Bump::CLI::References.new({
         'hello' => {
           '$ref' => '/some/absolute/path.yml'
         }
@@ -92,7 +92,7 @@ describe Bump::CLI::Tools::References do
     end
 
     it 'supports URI' do
-      references = Bump::CLI::Tools::References.new({
+      references = Bump::CLI::References.new({
         'hello' => {
           '$ref' => 'http://example.com/file.xml'
         }
@@ -105,7 +105,7 @@ describe Bump::CLI::Tools::References do
     end
 
     it 'supports URI with subpaths' do
-      references = Bump::CLI::Tools::References.new({
+      references = Bump::CLI::References.new({
         'hello' => {
           '$ref' => 'http://example.com/file.xml#subpath/subsub'
         }

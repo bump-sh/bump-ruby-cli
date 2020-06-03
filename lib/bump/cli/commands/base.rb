@@ -1,5 +1,5 @@
-require 'bump/cli/tools/definition'
-require 'bump/cli/tools/uuid'
+require 'bump/cli/definition'
+require 'bump/cli/uuid'
 
 module Bump
   class CLI
@@ -29,7 +29,7 @@ module Bump
         end
 
         def prepare_file(file, options)
-          Tools::Definition.new(file, import_external_references: options[:'import-external-references']).prepare
+          Definition.new(file, import_external_references: options[:'import-external-references']).prepare
         end
 
         def deprecation_warning(options)
@@ -60,7 +60,7 @@ module Bump
         end
 
         def documentation_uuid?(options)
-          Bump::CLI::Tools::UUID.valid?(options[:doc])
+          Bump::CLI::UUID.valid?(options[:doc])
         end
 
         def documentation_slug?(options)
@@ -68,7 +68,7 @@ module Bump
         end
 
         def hub_uuid?(options)
-          Bump::CLI::Tools::UUID.valid?(options[:hub])
+          Bump::CLI::UUID.valid?(options[:hub])
         end
 
         def hub_slug?(options)

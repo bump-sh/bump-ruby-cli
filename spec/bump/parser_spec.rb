@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-describe Bump::CLI::Tools::Parser do
+describe Bump::CLI::Parser do
   describe '#load' do
     it 'loads YAML definition and serializes it correctly' do
-      format, definition = Bump::CLI::Tools::Parser.new.load('property: value')
+      format, definition = Bump::CLI::Parser.new.load('property: value')
 
       expect(format).to eq(:yaml)
       expect(definition).to eq('property' => 'value')
     end
 
     it 'loads JSON definition and serializes it correctly' do
-      format, definition = Bump::CLI::Tools::Parser.new.load('{"property": "value"}')
+      format, definition = Bump::CLI::Parser.new.load('{"property": "value"}')
 
       expect(format).to eq(:json)
       expect(definition).to eq('property' => 'value')
@@ -19,13 +19,13 @@ describe Bump::CLI::Tools::Parser do
 
   describe '#dump' do
     it 'loads YAML definition and serializes it correctly' do
-      result = Bump::CLI::Tools::Parser.new.dump({ 'property' => 'value' }, :yaml)
+      result = Bump::CLI::Parser.new.dump({ 'property' => 'value' }, :yaml)
 
       expect(result).to include('property: value')
     end
 
     it 'loads JSON definition and serializes it correctly' do
-      result = Bump::CLI::Tools::Parser.new.dump({ 'property' => 'value' }, :json)
+      result = Bump::CLI::Parser.new.dump({ 'property' => 'value' }, :json)
 
       expect(result).to include('{"property":"value"}')
     end
