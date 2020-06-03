@@ -39,10 +39,11 @@ module Bump
         def replace_external_reference(reference)
           if external?(reference)
             if external_references[reference].nil?
-              @external_references[reference] = external_references.count + 1
+              @external_references[reference] = "#{external_references.count + 1}"
             end
 
-            "#/components/x-imported/#{external_references[reference]}"
+            subpath = reference[/#(.*)$/, 1]
+            "#/components/x-imported/#{external_references[reference]}#{ '/' + subpath if !subpath.nil? }"
           else
             reference
           end
@@ -60,6 +61,7 @@ module Bump
         end
 
         def prepare_path(key)
+          key = key.sub(/#.*/, '')
           if url?(key) || absolute_path?(key)
             key
           else
