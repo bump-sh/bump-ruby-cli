@@ -1,3 +1,5 @@
+require 'bump/cli/tools/references'
+
 module Bump
   class CLI
     module Tools
@@ -25,7 +27,11 @@ module Bump
 
         def parse_file_and_import_external_references
           original_format, definition = load_file
-          serialize(definition, original_format)
+
+          references = References.new(definition)
+          references.import!
+
+          serialize(references.definition, original_format)
         end
 
         def load_file
