@@ -29,7 +29,7 @@ module Bump
         end
 
         def prepare_file(file, options)
-          Tools::Definition.new(file).prepare
+          Tools::Definition.new(file, import_external_references: options[:'import-external-references']).prepare
         end
 
         def deprecation_warning(options)
