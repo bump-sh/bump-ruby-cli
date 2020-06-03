@@ -49,5 +49,44 @@ describe Bump::CLI::Tools::References do
 
       expect(references.definition.dig('hello', '$ref')).to eq('#/some/internal/path')
     end
+
+    it 'supports relative paths' do
+      references = Bump::CLI::Tools::References.new({
+        'hello' => {
+          '$ref' => 'some/internal/path.yml'
+        }
+      }, base_path: '/somewhere/base.yml')
+      allow(references).to receive(:open).and_return(spy(read: 'content'))
+
+      references.import!
+
+      expect(references).to have_received(:open).with('/somewhere/some/internal/path.yml')
+    end
+
+    it 'supports absolute paths' do
+      references = Bump::CLI::Tools::References.new({
+        'hello' => {
+          '$ref' => '/some/absolute/path.yml'
+        }
+      }, base_path: '/somewhere/base.yml')
+      allow(references).to receive(:open).and_return(spy(read: 'content'))
+
+      references.import!
+
+      expect(references).to have_received(:open).with('/some/absolute/path.yml')
+    end
+
+    it 'supports URI' do
+      references = Bump::CLI::Tools::References.new({
+        'hello' => {
+          '$ref' => 'http://example.com/file.xml'
+        }
+      }, base_path: '/somewhere/base.yml')
+      allow(references).to receive(:open).and_return(spy(read: 'content'))
+
+      references.import!
+
+      expect(references).to have_received(:open).with('http://example.com/file.xml')
+    end
   end
 end
