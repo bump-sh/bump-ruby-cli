@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'pathname'
 
 module Bump
   class CLI
@@ -6,8 +7,9 @@ module Bump
       class References
         attr_reader :definition
 
-        def initialize(definition)
+        def initialize(definition, base_path: '')
           @definition = definition
+          @base_path = cleanup(base_path)
           @processed = false
           @external_references = {}
         end
@@ -22,7 +24,7 @@ module Bump
 
         private
 
-        attr_reader :processed, :external_references
+        attr_reader :base_path, :processed, :external_references
 
         def traverse_and_replace_external_references(current, parent = nil)
           current.each do |key, value|
@@ -46,19 +48,39 @@ module Bump
           end
         end
 
-        def external?(reference)
-          !reference.start_with?('#')
-        end
-
         def import_references
           if external_references.count > 0
             @definition['components'] = {} if @definition['components'].nil?
             @definition['components']['x-imported'] = {} if @definition['components']['x-imported'].nil?
 
             external_references.each do |key, value|
-              @definition['components']['x-imported'][value.to_s] = open(key).read
+              _, @definition['components']['x-imported'][value.to_s] = Parser.new.load(open(prepare_path(key)).read)
             end
           end
+        end
+
+        def prepare_path(key)
+          if url?(key) || absolute_path?(key)
+            key
+          else
+            base_path + key
+          end
+        end
+
+        def external?(reference)
+          !reference.start_with?('#')
+        end
+
+        def url?(path)
+          path.start_with?('http')
+        end
+
+        def absolute_path?(path)
+          path.start_with?('/')
+        end
+
+        def cleanup(path)
+          Pathname.new(path).dirname.to_s + Pathname::SEPARATOR_LIST
         end
       end
     end
