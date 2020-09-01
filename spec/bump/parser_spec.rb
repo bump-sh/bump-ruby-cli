@@ -15,6 +15,13 @@ describe Bump::CLI::Parser do
       expect(format).to eq(:json)
       expect(definition).to eq('property' => 'value')
     end
+
+    it 'correctly fallbacks to simple text definition' do
+      format, definition = Bump::CLI::Parser.new.load("Not valid YAML: something.\n 0: #nop!")
+
+      expect(format).to eq(:text)
+      expect(definition).to eq("Not valid YAML: something.\n 0: #nop!")
+    end
   end
 
   describe '#dump' do

@@ -7,9 +7,11 @@ module Bump
       def load(content)
         [:json, ::JSON.parse(content)]
       rescue ::JSON::ParserError => e
-        [:yaml, ::YAML.safe_load(content, [Date, Time])]
-      rescue ::Psych::SyntaxError
-        raise 'Invalid format: definition file should be valid YAML or JSON'
+        begin
+          [:yaml, ::YAML.safe_load(content, [Date, Time])]
+        rescue ::Psych::SyntaxError
+          [:text, content]
+        end
       end
 
       def dump(definition, format)
