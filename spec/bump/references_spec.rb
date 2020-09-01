@@ -118,5 +118,19 @@ describe Bump::CLI::References do
       expect(references.definition.dig('components', 'x-imported', '1')).to eq('content')
       expect(references).to have_received(:open).with('http://example.com/file.xml')
     end
+
+    it 'imports arrays with references' do
+      references = Bump::CLI::References.new({
+        'hello' => [
+          { '$ref' => 'https://some.url/path' }
+        ]
+      })
+      allow(references).to receive(:open).and_return(spy(read: 'content'))
+
+      references.import!
+
+      expect(references.definition['hello'][0]['$ref']).to eq('#/components/x-imported/1')
+      expect(references.definition.dig('components', 'x-imported', '1')).to eq('content')
+    end
   end
 end

@@ -25,12 +25,16 @@ module Bump
 
       attr_reader :base_path, :processed, :external_references
 
-      def traverse_and_replace_external_references(current, parent = nil)
+      def traverse_and_replace_external_references(current)
         current.each do |key, value|
           if key == '$ref'
             current[key] = replace_external_reference(value)
           elsif value.is_a?(Hash)
-            traverse_and_replace_external_references(value, key)
+            traverse_and_replace_external_references(value)
+          elsif value.is_a?(Array)
+            value.each do |array_value|
+              traverse_and_replace_external_references(array_value)
+            end
           end
         end
       end
