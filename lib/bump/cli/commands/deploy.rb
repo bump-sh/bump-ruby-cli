@@ -20,7 +20,7 @@ module Bump
           with_errors_rescued do
             response = post(
               url: API_URL + "/versions",
-              body: body(file, options).to_json,
+              body: body(file, **options).to_json,
               token: options[:token]
             )
 

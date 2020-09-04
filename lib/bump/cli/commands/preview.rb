@@ -12,7 +12,7 @@ module Bump
           with_errors_rescued do
             response = post(
               url: API_URL + "/previews",
-              body: body(file, options).to_json
+              body: body(file, **options).to_json
             )
 
             if response.code == 201
