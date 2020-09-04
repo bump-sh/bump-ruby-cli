@@ -3,7 +3,7 @@ jobs:
   build-latest: &common-build
     working_directory: ~/bump-cli
     docker:
-      - image: circleci/ruby:2.5.0-node
+      - image: circleci/ruby:latest
     steps:
       - checkout
       - run:
@@ -29,20 +29,30 @@ jobs:
 
       - run:
           name: Run tests
-          command: rake
+          command: bundle exec rspec
+  build-2-6:
+    <<: *common-build
+    docker:
+      - image: circleci/ruby:2.6
+  build-2-5:
+    <<: *common-build
+    docker:
+      - image: circleci/ruby:2.5
   build-2-4:
     <<: *common-build
     docker:
-      - image: circleci/ruby:2.4.3-node
+      - image: circleci/ruby:2.4
   build-2-3:
     <<: *common-build
     docker:
-      - image: circleci/ruby:2.3.6-node
+      - image: circleci/ruby:2.3
 
 workflows:
   version: 2
   build:
     jobs:
       - build-latest
+      - build-2-6
+      - build-2-5
       - build-2-4
       - build-2-3
