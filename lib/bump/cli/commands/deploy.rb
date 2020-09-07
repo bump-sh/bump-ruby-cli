@@ -25,9 +25,9 @@ module Bump
             )
 
             if response.code == 201
-              puts "New version has been successfully deployed."
+              puts "The new version is currently being processed."
             elsif response.code == 204
-              puts "Version was already deployed."
+              puts "This version has already been deployed."
             else
               display_error(response)
             end

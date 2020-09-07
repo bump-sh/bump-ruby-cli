@@ -14,7 +14,7 @@ describe Bump::CLI::Commands::Deploy do
         specification: 'openapi/v2/json',
         validation: 'strict',
         'auto-create': true)
-    end.to output(/New version has been successfully deployed/).to_stdout
+    end.to output(/The new version is currently being processed/).to_stdout
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/versions').with(
       body: {
@@ -38,7 +38,7 @@ describe Bump::CLI::Commands::Deploy do
         hub: 'hub-slug',
         file: 'path/to/file'
       )
-    end.to output(/New version has been successfully deployed/).to_stdout
+    end.to output(/The new version is currently being processed/).to_stdout
 
     expect(WebMock).to have_requested(:post,'https://bump.sh/api/v1/versions').with(
       body: hash_including(
