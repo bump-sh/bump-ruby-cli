@@ -33,7 +33,9 @@ module Bump
             traverse_and_replace_external_references(value)
           elsif value.is_a?(Array)
             value.each do |array_value|
-              traverse_and_replace_external_references(array_value)
+              if array_value.is_a?(Hash)
+                traverse_and_replace_external_references(array_value)
+              end
             end
           end
         end

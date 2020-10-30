@@ -122,7 +122,8 @@ describe Bump::CLI::References do
     it 'imports arrays with references' do
       references = Bump::CLI::References.new({
         'hello' => [
-          { '$ref' => 'https://some.url/path' }
+          { '$ref' => 'https://some.url/path' },
+          'something_else'
         ]
       })
       allow(references).to receive(:open).and_return(spy(read: 'content'))
