@@ -8,14 +8,19 @@ module Bump
       def initialize(path, import_external_references: false)
         @path = path
         @import_external_references = import_external_references
+        @content = nil
       end
 
       def prepare
         if !import_external_references
-          read_file
+          @content = read_file
         else
-          parse_file_and_import_external_references
+          @content = parse_file_and_import_external_references
         end
+      end
+
+      def write(to:)
+        File.write(to, @content)
       end
 
       private
