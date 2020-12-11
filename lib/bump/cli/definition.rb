@@ -28,7 +28,7 @@ module Bump
       attr_reader :path, :import_external_references
 
       def read_file
-        open(path).read
+        open(path).read.force_encoding(Encoding::UTF_8)
       end
 
       def parse_file_and_import_external_references
