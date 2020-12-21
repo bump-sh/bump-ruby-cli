@@ -29,7 +29,10 @@ Bump tries to identify your file specification and format automatically. You can
 * `asyncapi/v2/json`
 * `asyncapi/v2/yaml`
 
-`doc` and `token` options used below can be found in your documentation settings page on https://bump.sh. Note that you can replace the token option by an environment variable, to keep it secret: `--token` can by replaced by `BUMP_TOKEN`.
+Both the `--doc` and `--token` options used below can be found in your documentation settings page on https://bump.sh. Note that you can replace both the `--doc` and `--token` option by an environment variable. This will help to keep those values secret:
+
+- `--doc` can by replaced by `BUMP_ID`.
+- `--token` can by replaced by `BUMP_TOKEN`.
 
 ### Preview
 
