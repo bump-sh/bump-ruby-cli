@@ -34,18 +34,4 @@ describe Bump::CLI::Definition do
       expect(definition.prepare).to include('{"property":"value"}')
     end
   end
-
-  describe "write" do
-    it "writes content to the given destination" do
-      definition = Bump::CLI::Definition.new('path/to/file')
-      file = spy(read: 'content')
-      allow(definition).to receive(:open).and_return(file)
-      allow(File).to receive(:write)
-
-      definition.prepare
-      definition.write(to: '/my/resolved-file.yml')
-
-      expect(File).to have_received(:write).with('/my/resolved-file.yml', 'content')
-    end
-  end
 end
