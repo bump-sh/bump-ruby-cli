@@ -19,82 +19,82 @@ describe Bump::CLI::Commands::Base do
     end
   end
 
-  it 'calls the given url with correct headers and body' do
+  it "calls the given url with correct headers and body" do
     command = Bump::CLI::Commands::BasePost.new
     stub_request(:post, "http://somewhere/")
 
-    command.call(url: 'http://somewhere', body: 'hello world', token: '4815162342')
+    command.call(url: "http://somewhere", body: "hello world", token: "4815162342")
 
-    expect(a_request(:post, 'http://somewhere').with(
-      body: 'hello world',
+    expect(a_request(:post, "http://somewhere").with(
+      body: "hello world",
       headers: {
-        'User-Agent' => Bump::CLI::Commands::Base::USER_AGENT,
-        'Authorization' => "Basic #{Base64.strict_encode64('4815162342:')}"
+        "User-Agent" => Bump::CLI::Commands::Base::USER_AGENT,
+        "Authorization" => "Basic #{Base64.strict_encode64("4815162342:")}"
       }
     )).to have_been_made.once
   end
 
-  it 'handles IO errors' do
+  it "handles IO errors" do
     command = Bump::CLI::Commands::BaseErrors.new
 
-    expect do
+    expect {
       begin
         command.call do
-          raise Errno::ENOENT.new('Oops')
+          raise Errno::ENOENT.new("Oops")
         end
       rescue SystemExit; end
-    end.to output(/Oops/).to_stderr
+    }.to output(/Oops/).to_stderr
   end
 
-  it 'handles socket errors' do
+  it "handles socket errors" do
     command = Bump::CLI::Commands::BaseErrors.new
 
-    expect do
+    expect {
       begin
         command.call do
-          raise SocketError.new('Oops')
+          raise SocketError.new("Oops")
         end
       rescue SystemExit; end
-    end.to output(/Oops/).to_stderr
+    }.to output(/Oops/).to_stderr
   end
 
-  it 'handles http errors' do
+  it "handles http errors" do
     command = Bump::CLI::Commands::BaseErrors.new
 
-    expect do
+    expect {
       begin
         command.call do
-          raise HTTP::Error.new('Oops')
+          raise HTTP::Error.new("Oops")
         end
       rescue SystemExit; end
-    end.to output(/Oops/).to_stderr
+    }.to output(/Oops/).to_stderr
   end
 
-  it 'handles validation error' do
+  it "handles validation error" do
     command = Bump::CLI::Commands::BasePost.new
     stub_request(:post, "http://somewhere/").to_return(
       status: 422,
-      body: { 'errors' =>  { 'raw_definition' => ['This is an error'] } }.to_json
+      body: {"errors" => {"raw_definition" => ["This is an error"]}}.to_json
     )
 
-    expect do
+    expect {
       begin
-        command.call(url: 'http://somewhere', body: 'hello')
+        command.call(url: "http://somewhere", body: "hello")
       rescue SystemExit; end
-    end.to output(/This is an error/).to_stderr
+    }.to output(/This is an error/).to_stderr
   end
 
-  it 'handles validation errors even when backend returns shit' do
+  it "handles validation errors even when backend returns shit" do
     command = Bump::CLI::Commands::BasePost.new
     stub_request(:post, "http://somewhere/").to_return(
       status: 422,
-      body: { 'message' => 'Invalid', 'errors' => { 'attribute' => 'message' } }.to_json
+      body: {"message" => "Invalid", "errors" => {"attribute" => "message"}}.to_json
     )
 
-    expect do
+    expect {
       begin
-        command.call(url: 'http://somewhere', body: 'hello')
+        command.call(url: "http://somewhere", body: "hello")
       rescue SystemExit; end
-    end.to output(/Invalid request:/).to_stderr
+    }.to output(/Invalid request:/).to_stderr
   end
 end

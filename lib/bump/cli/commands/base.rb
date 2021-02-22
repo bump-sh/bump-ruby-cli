@@ -1,5 +1,5 @@
-require 'bump/cli/definition'
-require 'bump/cli/uuid'
+require "bump/cli/definition"
+require "bump/cli/uuid"
 
 module Bump
   class CLI
@@ -39,7 +39,7 @@ module Bump
         end
 
         def present?(string)
-          !string.nil? && string != ''
+          !string.nil? && string != ""
         end
 
         def compact(hash)
@@ -81,14 +81,14 @@ module Bump
           abort "Error: #{error.message}"
         end
 
-        def headers(token: '')
+        def headers(token: "")
           headers = {
-            'Content-Type' => 'application/json',
-            'User-Agent' => USER_AGENT
+            "Content-Type" => "application/json",
+            "User-Agent" => USER_AGENT
           }
 
           if token
-            headers['Authorization'] = "Basic #{Base64.strict_encode64(token + ':')}"
+            headers["Authorization"] = "Basic #{Base64.strict_encode64(token + ":")}"
           end
 
           headers
@@ -109,9 +109,9 @@ module Bump
         end
 
         def display_validation_errors(body)
-          errors = body.dig('errors') || []
+          errors = body.dig("errors") || []
 
-          $stderr.puts "Invalid request:"
+          warn "Invalid request:"
           errors.each do |attribute, messages|
             display_attribute_errors(attribute, messages)
           end
@@ -120,15 +120,14 @@ module Bump
         end
 
         def display_attribute_errors(attribute, messages)
-          case
-          when messages.is_a?(String)
-            $stderr.puts "- #{attribute}: #{messages}"
-          when messages.is_a?(Array) && messages.count == 1
-            $stderr.puts "- #{attribute}: #{messages[0]}"
-          when messages.is_a?(Array)
-            $stderr.puts "- #{attribute}:"
+          if messages.is_a?(String)
+            warn "- #{attribute}: #{messages}"
+          elsif messages.is_a?(Array) && messages.count == 1
+            warn "- #{attribute}: #{messages[0]}"
+          elsif messages.is_a?(Array)
+            warn "- #{attribute}:"
             messages.each do |message|
-              $stderr.puts " #{message}"
+              warn " #{message}"
             end
           end
         end

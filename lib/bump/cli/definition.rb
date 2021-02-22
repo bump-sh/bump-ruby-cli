@@ -1,6 +1,6 @@
-require 'open-uri'
-require 'bump/cli/parser'
-require 'bump/cli/references'
+require "open-uri"
+require "bump/cli/parser"
+require "bump/cli/references"
 
 module Bump
   class CLI

@@ -1,5 +1,5 @@
-require 'json'
-require 'yaml'
+require "json"
+require "yaml"
 
 module Bump
   class CLI
