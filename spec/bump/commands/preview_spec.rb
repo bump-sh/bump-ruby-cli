@@ -10,12 +10,13 @@ describe Bump::CLI::Commands::Preview do
 
     expect(WebMock).to have_requested(:post, "https://bump.sh/api/v1/previews").with(
       headers: {
-        'Content-Type': "application/json"
+        "Content-Type": "application/json"
       },
       body: {
         definition: "body",
         specification: "openapi/v3/yaml",
-        validation: "strict"
+        validation: "strict",
+        references: []
       }
     )
   end

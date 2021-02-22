@@ -1,137 +1,68 @@
 require "spec_helper"
 
 describe Bump::CLI::References do
-  describe "#import!" do
+  describe "#load" do
     it "it imports file system references" do
-      references = Bump::CLI::References.new({
+      references = Bump::CLI::References.new(root_path: "/app/specification/")
+      allow(URI).to receive(:open).and_return(spy(read: "content"))
+
+      references.load({
         "hello" => {
           "$ref" => "some/filesystem/path"
         },
         "another" => {
-          "$ref" => "some/other/filesystem/path"
+          "$ref" => "./some/other/filesystem/path"
         },
-        "duplicate" => {
-          "$ref" => "some/filesystem/path"
+        "absolute" => {
+          "$ref" => "/some/absolute/filesystem/path"
         }
       })
-      allow(references).to receive(:open).and_return(spy(read: "content"))
 
-      references.import!
-
-      expect(references.definition.dig("hello", "$ref")).to eq("#/components/x-imported/1")
-      expect(references.definition.dig("another", "$ref")).to eq("#/components/x-imported/2")
-      expect(references.definition.dig("duplicate", "$ref")).to eq("#/components/x-imported/1")
-      expect(references.definition.dig("components", "x-imported", "1")).to eq("content")
-      expect(references.definition.dig("components", "x-imported", "2")).to eq("content")
+      expect(references["some/filesystem/path"]).to eq("content")
+      expect(URI).to have_received(:open).with("/app/specification/some/filesystem/path")
+      expect(references["./some/other/filesystem/path"]).to eq("content")
+      expect(URI).to have_received(:open).with("/app/specification/some/filesystem/path")
+      expect(references["/some/absolute/filesystem/path"]).to eq("content")
+      expect(URI).to have_received(:open).with("/some/absolute/filesystem/path")
     end
 
     it "imports URI references" do
-      references = Bump::CLI::References.new({
+      references = Bump::CLI::References.new
+      stub_request(:get, "https://some.url/path").to_return(body: "content")
+
+      references.load({
         "hello" => {
-          "$ref" => "https://some.url/path"
+          "$ref" => "https://some.url/path#/relativePath/"
         }
       })
-      allow(references).to receive(:open).and_return(spy(read: "content"))
 
-      references.import!
-
-      expect(references.definition.dig("hello", "$ref")).to eq("#/components/x-imported/1")
-      expect(references.definition.dig("components", "x-imported", "1")).to eq("content")
+      expect(references["https://some.url/path"]).to eq("content")
     end
 
     it "ignores internal references" do
-      references = Bump::CLI::References.new({
+      references = Bump::CLI::References.new
+
+      references.load({
         "hello" => {
           "$ref" => "#/some/internal/path"
         }
       })
-      references.import!
 
-      expect(references.definition.dig("hello", "$ref")).to eq("#/some/internal/path")
-    end
-
-    it "supports relative paths" do
-      references = Bump::CLI::References.new({
-        "hello" => {
-          "$ref" => "some/internal/path.yml"
-        }
-      }, base_path: "/somewhere/base.yml")
-      allow(references).to receive(:open).and_return(spy(read: "content"))
-
-      references.import!
-
-      expect(references).to have_received(:open).with("/somewhere/some/internal/path.yml")
-    end
-
-    it "supports paths with subpaths" do
-      references = Bump::CLI::References.new({
-        "hello" => {
-          "$ref" => "some/internal/path.yml#subpath/subsub"
-        }
-      }, base_path: "/somewhere/base.yml")
-      allow(references).to receive(:open).and_return(spy(read: "content"))
-
-      references.import!
-
-      expect(references.definition.dig("hello", "$ref")).to eq("#/components/x-imported/1/subpath/subsub")
-      expect(references.definition.dig("components", "x-imported", "1")).to eq("content")
-      expect(references).to have_received(:open).with("/somewhere/some/internal/path.yml")
-    end
-
-    it "supports absolute paths" do
-      references = Bump::CLI::References.new({
-        "hello" => {
-          "$ref" => "/some/absolute/path.yml"
-        }
-      }, base_path: "/somewhere/base.yml")
-      allow(references).to receive(:open).and_return(spy(read: "content"))
-
-      references.import!
-
-      expect(references).to have_received(:open).with("/some/absolute/path.yml")
-    end
-
-    it "supports URI" do
-      references = Bump::CLI::References.new({
-        "hello" => {
-          "$ref" => "http://example.com/file.xml"
-        }
-      }, base_path: "/somewhere/base.yml")
-      allow(references).to receive(:open).and_return(spy(read: "content"))
-
-      references.import!
-
-      expect(references).to have_received(:open).with("http://example.com/file.xml")
-    end
-
-    it "supports URI with subpaths" do
-      references = Bump::CLI::References.new({
-        "hello" => {
-          "$ref" => "http://example.com/file.xml#subpath/subsub"
-        }
-      }, base_path: "/somewhere/base.yml")
-      allow(references).to receive(:open).and_return(spy(read: "content"))
-
-      references.import!
-
-      expect(references.definition.dig("hello", "$ref")).to eq("#/components/x-imported/1/subpath/subsub")
-      expect(references.definition.dig("components", "x-imported", "1")).to eq("content")
-      expect(references).to have_received(:open).with("http://example.com/file.xml")
+      expect(references.size).to eq(0)
     end
 
     it "imports arrays with references" do
-      references = Bump::CLI::References.new({
+      references = Bump::CLI::References.new
+      stub_request(:get, "https://some.url/path").to_return(body: "content")
+
+      references.load({
         "hello" => [
           {"$ref" => "https://some.url/path"},
           "something_else"
         ]
       })
-      allow(references).to receive(:open).and_return(spy(read: "content"))
 
-      references.import!
-
-      expect(references.definition["hello"][0]["$ref"]).to eq("#/components/x-imported/1")
-      expect(references.definition.dig("components", "x-imported", "1")).to eq("content")
+      expect(references["https://some.url/path"]).to eq("content")
     end
   end
 end

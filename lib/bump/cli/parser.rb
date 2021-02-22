@@ -5,12 +5,12 @@ module Bump
   class CLI
     class Parser
       def load(content)
-        [:json, ::JSON.parse(content)]
+        ::JSON.parse(content)
       rescue ::JSON::ParserError => e
         begin
-          [:yaml, ::YAML.safe_load(content, [Date, Time])]
+          ::YAML.safe_load(content, [Date, Time])
         rescue ::Psych::SyntaxError
-          [:text, content]
+          content
         end
       end
 

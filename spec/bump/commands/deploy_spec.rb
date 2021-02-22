@@ -7,13 +7,13 @@ describe Bump::CLI::Commands::Deploy do
     expect {
       new_command.call(
         doc: "aaaa0000-bb11-cc22-dd33-eeeeee444444",
-        'doc-name': "Hello world",
+        "doc-name": "Hello world",
         hub: "aaaa0000-bb11-cc22-dd33-eeeeee444444",
-        token:  "token",
+        token: "token",
         file: "path/to/file",
         specification: "openapi/v2/json",
         validation: "strict",
-        'auto-create': true
+        "auto-create": true
 )
     }.to output(/The new version is currently being processed/).to_stdout
 
@@ -23,6 +23,7 @@ describe Bump::CLI::Commands::Deploy do
         documentation_name: "Hello world",
         hub_id: "aaaa0000-bb11-cc22-dd33-eeeeee444444",
         definition: "body",
+        references: [],
         specification: "openapi/v2/json",
         validation: "strict",
         auto_create_documentation: true

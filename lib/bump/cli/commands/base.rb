@@ -24,11 +24,18 @@ module Bump
           compact(
             {
               definition: definition.content,
+              references: prepare_references(definition.external_references),
               specification: options[:specification],
               validation: options[:validation],
               auto_create_documentation: options[:'auto-create']
             }.merge(documentation_or_hub(options))
           )
+        end
+
+        def prepare_references(references)
+          references.reduce([]) { |references, (location, content)|
+            references << {location: location, content: content}
+          }
         end
 
         def deprecation_warning(options)

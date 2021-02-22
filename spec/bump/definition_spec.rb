@@ -14,12 +14,13 @@ describe Bump::CLI::Definition do
 
     it "loads the definition and import references" do
       definition = Bump::CLI::Definition.new("path/to/file", import_external_references: true)
-      allow(definition).to receive(:parse_file_and_import_external_references).and_return("content")
+      allow(definition).to receive(:read_file).and_return("property: value")
+      allow(definition.external_references).to receive(:load).and_call_original
 
       definition.prepare!
 
-      expect(definition.content).to eq("content")
-      expect(definition).to have_received(:parse_file_and_import_external_references).once
+      expect(definition.content).to eq("property: value")
+      expect(definition.external_references).to have_received(:load).with("property" => "value")
     end
 
     it "loads YAML definition and serializes it correctly" do
@@ -31,13 +32,13 @@ describe Bump::CLI::Definition do
       expect(definition.content).to include("property: value")
     end
 
-    it "loads JSON definition and serializes it correctly" do
+    it "loads JSON definition" do
       definition = Bump::CLI::Definition.new("path/to/file", import_external_references: true)
-      allow(definition).to receive(:read_file).and_return('{"property": "value"}')
+      allow(definition).to receive(:read_file).and_return("{\"property\": \"value\"}")
 
       definition.prepare!
 
-      expect(definition.content).to include('{"property":"value"}')
+      expect(definition.content).to include("{\"property\": \"value\"}")
     end
   end
 end
