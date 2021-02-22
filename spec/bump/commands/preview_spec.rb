@@ -53,7 +53,7 @@ describe Bump::CLI::Commands::Preview do
 
   def new_command
     command = Bump::CLI::Commands::Preview.new
-    allow(URI).to receive(:open).and_return(spy(read: "body"))
+    allow(Bump::CLI::Resource).to receive(:read).and_return("body")
     command
   end
 end

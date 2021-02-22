@@ -1,4 +1,3 @@
-require "open-uri"
 require "bump/cli/references"
 require "bump/cli/resource"
 
@@ -14,7 +13,7 @@ module Bump
       end
 
       def prepare!
-        @content = read_file
+        @content = Resource.read(path)
 
         if import_external_references
           external_references.load(Resource.parse(content))
@@ -27,10 +26,6 @@ module Bump
 
       def find_base_path(path)
         Pathname.new(path.to_s).dirname.to_s + Pathname::SEPARATOR_LIST
-      end
-
-      def read_file
-        URI.open(path).read.force_encoding(Encoding::UTF_8)
       end
     end
   end

@@ -36,7 +36,7 @@ module Bump
         if self[reference].nil?
           base_reference = cleanup_reference(reference)
           location = prepare_location(base_reference)
-          self[base_reference] = URI.open(location).read.force_encoding(Encoding::UTF_8)
+          self[base_reference] = Resource.read(location)
         end
       end
 

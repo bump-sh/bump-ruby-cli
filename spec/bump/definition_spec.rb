@@ -4,17 +4,16 @@ describe Bump::CLI::Definition do
   describe "#prepare" do
     it "opens the file and reads its content" do
       definition = Bump::CLI::Definition.new("path/to/file")
-      allow(URI).to receive(:open).and_return(spy(read: "content"))
+      allow(Bump::CLI::Resource).to receive(:read).and_return("content")
 
       definition.prepare!
 
       expect(definition.content).to eq("content")
-      expect(URI).to have_received("open").once.with("path/to/file")
     end
 
     it "loads the definition and import references" do
       definition = Bump::CLI::Definition.new("path/to/file", import_external_references: true)
-      allow(definition).to receive(:read_file).and_return("property: value")
+      allow(Bump::CLI::Resource).to receive(:read).and_return("property: value")
       allow(definition.external_references).to receive(:load).and_call_original
 
       definition.prepare!
@@ -25,7 +24,7 @@ describe Bump::CLI::Definition do
 
     it "loads YAML definition and serializes it correctly" do
       definition = Bump::CLI::Definition.new("path/to/file", import_external_references: true)
-      allow(definition).to receive(:read_file).and_return("property: value")
+      allow(Bump::CLI::Resource).to receive(:read).and_return("property: value")
 
       definition.prepare!
 
@@ -34,7 +33,7 @@ describe Bump::CLI::Definition do
 
     it "loads JSON definition" do
       definition = Bump::CLI::Definition.new("path/to/file", import_external_references: true)
-      allow(definition).to receive(:read_file).and_return("{\"property\": \"value\"}")
+      allow(Bump::CLI::Resource).to receive(:read).and_return("{\"property\": \"value\"}")
 
       definition.prepare!
 

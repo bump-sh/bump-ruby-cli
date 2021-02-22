@@ -4,7 +4,7 @@ describe Bump::CLI::References do
   describe "#load" do
     it "it imports file system references" do
       references = Bump::CLI::References.new(root_path: "/app/specification/")
-      allow(URI).to receive(:open).and_return(spy(read: "content"))
+      allow(File).to receive(:read).and_return("content")
 
       references.load({
         "hello" => {
@@ -19,11 +19,11 @@ describe Bump::CLI::References do
       })
 
       expect(references["some/filesystem/path"]).to eq("content")
-      expect(URI).to have_received(:open).with("/app/specification/some/filesystem/path")
+      expect(File).to have_received(:read).with("/app/specification/some/filesystem/path")
       expect(references["./some/other/filesystem/path"]).to eq("content")
-      expect(URI).to have_received(:open).with("/app/specification/some/filesystem/path")
+      expect(File).to have_received(:read).with("/app/specification/some/filesystem/path")
       expect(references["/some/absolute/filesystem/path"]).to eq("content")
-      expect(URI).to have_received(:open).with("/some/absolute/filesystem/path")
+      expect(File).to have_received(:read).with("/some/absolute/filesystem/path")
     end
 
     it "imports URI references" do
