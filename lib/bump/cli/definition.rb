@@ -1,6 +1,6 @@
 require "open-uri"
-require "bump/cli/parser"
 require "bump/cli/references"
+require "bump/cli/resource"
 
 module Bump
   class CLI
@@ -17,7 +17,7 @@ module Bump
         @content = read_file
 
         if import_external_references
-          external_references.load(parser.load(content))
+          external_references.load(Resource.parse(content))
         end
       end
 
@@ -31,10 +31,6 @@ module Bump
 
       def read_file
         URI.open(path).read.force_encoding(Encoding::UTF_8)
-      end
-
-      def parser
-        @parser ||= Parser.new
       end
     end
   end
