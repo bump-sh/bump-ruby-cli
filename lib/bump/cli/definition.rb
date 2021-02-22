@@ -5,16 +5,18 @@ require "bump/cli/references"
 module Bump
   class CLI
     class Definition
+      attr_reader :content
+
       def initialize(path, import_external_references: false)
         @path = path
         @import_external_references = import_external_references
       end
 
-      def prepare
+      def prepare!
         if !import_external_references
-          read_file
+          @content = read_file
         else
-          parse_file_and_import_external_references
+          @content = parse_file_and_import_external_references
         end
       end
 
@@ -23,7 +25,7 @@ module Bump
       attr_reader :path, :import_external_references
 
       def read_file
-        open(path).read.force_encoding(Encoding::UTF_8)
+        URI.open(path).read.force_encoding(Encoding::UTF_8)
       end
 
       def parse_file_and_import_external_references

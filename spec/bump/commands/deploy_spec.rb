@@ -94,7 +94,7 @@ describe Bump::CLI::Commands::Deploy do
 
   def new_command
     command = Bump::CLI::Commands::Deploy.new
-    allow(command).to receive(:prepare_file).and_return("body")
+    allow(URI).to receive(:open).and_return(spy(read: "body"))
     command
   end
 end

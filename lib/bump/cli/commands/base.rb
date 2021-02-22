@@ -18,18 +18,17 @@ module Bump
         def body(file, **options)
           deprecation_warning(options)
 
+          definition = Definition.new(file, import_external_references: options[:'import-external-references'])
+          definition.prepare!
+
           compact(
             {
-              definition: prepare_file(file, options),
+              definition: definition.content,
               specification: options[:specification],
               validation: options[:validation],
               auto_create_documentation: options[:'auto-create']
             }.merge(documentation_or_hub(options))
           )
-        end
-
-        def prepare_file(file, options)
-          Definition.new(file, import_external_references: options[:'import-external-references']).prepare
         end
 
         def deprecation_warning(options)
