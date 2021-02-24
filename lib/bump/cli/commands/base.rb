@@ -18,7 +18,7 @@ module Bump
         def body(file, **options)
           deprecation_warning(options)
 
-          definition = Definition.new(file, import_external_references: options[:'import-external-references'])
+          definition = Definition.new(file, import_external_references: !options[:'no-external-references'])
           definition.prepare!
 
           compact(

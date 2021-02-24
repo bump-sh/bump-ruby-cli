@@ -3,6 +3,7 @@ require "spec_helper"
 describe Bump::CLI::Commands::Deploy do
   it "calls the server and exit successfully if success" do
     stub_bump_api_validate("versions/post_success.http")
+    allow(Bump::CLI::Resource).to receive(:read).and_return("body")
 
     expect {
       new_command.call(
@@ -14,7 +15,7 @@ describe Bump::CLI::Commands::Deploy do
         specification: "openapi/v2/json",
         validation: "strict",
         "auto-create": true
-)
+      )
     }.to output(/The new version is currently being processed/).to_stdout
 
     expect(WebMock).to have_requested(:post, "https://bump.sh/api/v1/versions").with(
@@ -31,8 +32,55 @@ describe Bump::CLI::Commands::Deploy do
     )
   end
 
+  it "handles external references by default" do
+    stub_bump_api_validate("versions/post_success.http")
+    allow(Bump::CLI::Resource).to receive(:read).with("path/to/file").and_return("$ref: https://example.url/openapi.yml")
+    allow(Bump::CLI::Resource).to receive(:read).with("https://example.url/openapi.yml").and_return("hello: world")
+    stub_request(:get, "https://example.url/openapi.yml").to_return(body: "hello: world")
+
+    expect {
+      new_command.call(
+        doc: "aaaa0000-bb11-cc22-dd33-eeeeee444444",
+        token: "token",
+        file: "path/to/file"
+      )
+    }.to output(/The new version is currently being processed/).to_stdout
+
+    expect(WebMock).to have_requested(:post, "https://bump.sh/api/v1/versions").with(
+      body: {
+        documentation_id: "aaaa0000-bb11-cc22-dd33-eeeeee444444",
+        definition: "$ref: https://example.url/openapi.yml",
+        references: [{location: "https://example.url/openapi.yml", content: "hello: world"}],
+      }
+    )
+  end
+
+  it "allows disabling external references import" do
+    stub_bump_api_validate("versions/post_success.http")
+    allow(Bump::CLI::Resource).to receive(:read).and_return("$ref: https://example.url/openapi.yml")
+    stub_request(:get, "https://example.url/openapi.yml").to_return(body: "hello: world")
+
+    expect {
+      new_command.call(
+        doc: "aaaa0000-bb11-cc22-dd33-eeeeee444444",
+        token: "token",
+        file: "path/to/file",
+        "no-external-references": true
+      )
+    }.to output(/The new version is currently being processed/).to_stdout
+
+    expect(WebMock).to have_requested(:post, "https://bump.sh/api/v1/versions").with(
+      body: {
+        documentation_id: "aaaa0000-bb11-cc22-dd33-eeeeee444444",
+        definition: "$ref: https://example.url/openapi.yml",
+        references: []
+      }
+    )
+  end
+
   it "deploys with a slugs instead of ids" do
     stub_bump_api_validate("versions/post_success.http")
+    allow(Bump::CLI::Resource).to receive(:read).and_return("body")
 
     expect {
       new_command.call(
@@ -52,6 +100,7 @@ describe Bump::CLI::Commands::Deploy do
 
   it "supports deprecated id option and displays a warning" do
     stub_bump_api_validate("versions/post_success.http")
+    allow(Bump::CLI::Resource).to receive(:read).and_return("body")
 
     expect {
       new_command.call(
@@ -82,6 +131,7 @@ describe Bump::CLI::Commands::Deploy do
 
   it "displays the definition errors in case of unprocessable entity" do
     stub_bump_api_validate("versions/post_unprocessable_entity.http")
+    allow(Bump::CLI::Resource).to receive(:read).and_return("body")
 
     expect {
       begin
@@ -92,6 +142,7 @@ describe Bump::CLI::Commands::Deploy do
 
   it "displays a generic error message in case of unknown error" do
     stub_bump_api_validate("versions/post_unknown_error.http")
+    allow(Bump::CLI::Resource).to receive(:read).and_return("body")
 
     expect {
       begin
@@ -107,8 +158,6 @@ describe Bump::CLI::Commands::Deploy do
   end
 
   def new_command
-    command = Bump::CLI::Commands::Deploy.new
-    allow(Bump::CLI::Resource).to receive(:read).and_return("body")
-    command
+    Bump::CLI::Commands::Deploy.new
   end
 end
