@@ -92,7 +92,7 @@ module Bump
         rescue => error
           warn "An unexpected error occurred. Sorry about that!"
           warn "We don't monitor errors raised by the CLI running on your computer, so we have not been notified."
-          warn "You can help us fix this by creating an issue on https://github.com/bump-sh/bump-cli/issues."
+          warn "You can help us fix this by creating an issue on https://github.com/bump-sh/bump-cli/issues/new?template=cli-runtime-error.md."
           warn "\n"
           warn "#{error.class}: #{error.message}"
           warn error.backtrace.take(10).join("\n")
