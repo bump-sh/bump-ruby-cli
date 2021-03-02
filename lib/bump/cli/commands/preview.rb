@@ -6,7 +6,7 @@ module Bump
         argument :file, required: true, desc: "Path or URL to your API documentation file. OpenAPI (2.0 to 3.0.2) and AsyncAPI (2.0) specifications are currently supported."
         option :specification, desc: "Specification of the definition"
         option :validation, desc: "Validation mode", values: %w[basic strict], default: "basic"
-        option :'import-external-references', type: :boolean, default: false, desc: "Import external $refs (URI or file system) into the specification before sending it to Bump servers"
+        option :'import-external-references', type: :boolean, default: false, desc: "[DEPRECATED] External references are imported by default"
 
         def call(file:, **options)
           with_errors_rescued do

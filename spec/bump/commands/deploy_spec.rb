@@ -67,6 +67,19 @@ describe Bump::CLI::Commands::Deploy do
     )
   end
 
+  it "supports deprecated id option and displays a warning" do
+    stub_bump_api_validate("versions/post_success.http")
+    allow(Bump::CLI::Resource).to receive(:read).and_return("body")
+
+    expect {
+      new_command.call(
+        doc: "here-is-my-doc",
+        file: "path/to/file",
+        "import-external-references": true
+      )
+    }.to output(/\[DEPRECATION WARNING\]/).to_stdout
+  end
+
   it "displays the definition errors in case of unprocessable entity" do
     stub_bump_api_validate("versions/post_unprocessable_entity.http")
 

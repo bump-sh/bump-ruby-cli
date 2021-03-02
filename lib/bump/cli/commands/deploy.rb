@@ -14,7 +14,7 @@ module Bump
         option :specification, desc: "Specification of the definition"
         option :validation, desc: "Validation mode", values: %w[basic strict], default: "basic"
         option :'auto-create', type: :boolean, default: false, desc: "Automatically create the documentation if needed (only available with a hub and when specifying a slug for documentation)"
-        option :'import-external-references', type: :boolean, default: false, desc: "Import external $refs (URI or file system) into the specification before sending it to Bump servers"
+        option :'import-external-references', type: :boolean, default: false, desc: "[DEPRECATED] External references are imported by default"
 
         def call(file:, **options)
           with_errors_rescued do
