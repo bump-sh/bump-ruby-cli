@@ -1,24 +1,6 @@
 require "spec_helper"
 
 describe Bump::CLI::Commands::Base do
-  class Bump::CLI::Commands::BaseErrors < Bump::CLI::Commands::Base
-    def call
-      with_errors_rescued do
-        yield
-      end
-    end
-  end
-
-  class Bump::CLI::Commands::BasePost < Bump::CLI::Commands::Base
-    def call(url:, body:, token: nil)
-      response = post(url: url, body: body, token: token)
-
-      if response.status > 400
-        display_error(response)
-      end
-    end
-  end
-
   it "calls the given url with correct headers and body" do
     command = Bump::CLI::Commands::BasePost.new
     stub_request(:post, "http://somewhere/")
@@ -96,5 +78,23 @@ describe Bump::CLI::Commands::Base do
         command.call(url: "http://somewhere", body: "hello")
       rescue SystemExit; end
     }.to output(/Invalid request:/).to_stderr
+  end
+end
+
+class Bump::CLI::Commands::BaseErrors < Bump::CLI::Commands::Base
+  def call
+    with_errors_rescued do
+      yield
+    end
+  end
+end
+
+class Bump::CLI::Commands::BasePost < Bump::CLI::Commands::Base
+  def call(url:, body:, token: nil)
+    response = post(url: url, body: body, token: token)
+
+    if response.status > 400
+      display_error(response)
+    end
   end
 end
