@@ -58,7 +58,7 @@ describe Bump::CLI::Commands::Deploy do
         id: "old-school-id",
         file: "path/to/file"
       )
-    }.to output(/[DEPRCATION WG]/).to_stdout
+    }.to output(/\[DEPRECATION WARNING\]/).to_stdout
 
     expect(WebMock).to have_requested(:post, "https://bump.sh/api/v1/versions").with(
       body: hash_including(
