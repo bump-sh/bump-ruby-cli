@@ -89,6 +89,14 @@ module Bump
           yield
         rescue HTTP::Error, Errno::ENOENT, SocketError => error
           abort "Error: #{error.message}"
+        rescue => error
+          warn "An unexpected error occurred. Sorry about that!"
+          warn "We don't monitor errors raised by the CLI running on your computer, so we have not been notified."
+          warn "You can help us fix this by creating an issue on https://github.com/bump-sh/bump-cli/issues."
+          warn "\n"
+          warn "#{error.class}: #{error.message}"
+          warn error.backtrace.take(10).join("\n")
+          exit(1)
         end
 
         def headers(token: "")

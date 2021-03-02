@@ -79,6 +79,16 @@ describe Bump::CLI::Commands::Base do
       rescue SystemExit; end
     }.to output(/Invalid request:/).to_stderr
   end
+
+  it "handles unexpected runtime errors" do
+    command = Bump::CLI::Commands::BaseErrors.new
+
+    expect {
+      begin
+        command.call { raise "Oops something bad happend" }
+      rescue SystemExit; end
+    }.to output(/You can help us fix this by creating an issue on https:\/\/github.com\/bump-sh\/bump-cli\/issues/).to_stderr
+  end
 end
 
 class Bump::CLI::Commands::BaseErrors < Bump::CLI::Commands::Base
