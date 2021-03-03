@@ -39,17 +39,9 @@ module Bump
         end
 
         def deprecation_warning(options)
-          if present?(options[:id])
-            puts "[DEPRECATION WARNING] --id option is deprecated. Please use --doc instead."
-          end
-
           if options[:"import-external-references"]
             puts "[DEPRECATION WARNING] --import-external-references option is deprecated. External references are imported by default."
           end
-        end
-
-        def present?(string)
-          !string.nil? && string != ""
         end
 
         def compact(hash)

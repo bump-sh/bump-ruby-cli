@@ -6,7 +6,6 @@ module Bump
       class Validate < Base
         desc "Validate a given file against its schema definition"
         argument :file, required: true, desc: "Path or URL to your API documentation file. OpenAPI (2.0 to 3.0.2) and AsyncAPI (2.0) specifications are currently supported."
-        option :id, default: ENV.fetch("BUMP_ID", ""), desc: "[DEPRECATED] Documentation id. Use the `--doc` option instead"
         option :doc, default: ENV.fetch("BUMP_ID", ""), desc: "Documentation public id or slug"
         option :'doc-name', desc: "Documentation name. Used with --auto-create flag."
         option :hub, desc: "Hub id or slug"
