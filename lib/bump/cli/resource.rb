@@ -6,7 +6,8 @@ module Bump
     class Resource
       def self.read(location)
         if location.start_with?("http")
-          ::HTTP.get(location).to_s
+          ::HTTP.follow(max_hops: 50)
+            .get(location).to_s
         else
           ::File.read(location).force_encoding(Encoding::UTF_8)
         end
