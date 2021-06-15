@@ -3,6 +3,7 @@ require "spec_helper"
 describe Bump::CLI::Resource do
   describe ".read" do
     it "handles URL location" do
+      allow(HTTP).to receive(:follow).and_return(HTTP)
       allow(HTTP).to receive(:get).and_return("hello: world")
 
       content = Bump::CLI::Resource.read("https://example.com/source.yml")
