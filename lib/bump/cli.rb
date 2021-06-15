@@ -9,6 +9,14 @@ module Bump
     API_URL = ROOT_URL + API_PATH
 
     def call(*args)
+      warn ":WARNING:"
+      warn "  This Bump CLI is now legacy and will not be maintained any further."
+      warn ""
+      warn "  Please update to our new v2.x CLI available at https://github.com/bump-sh/cli"
+      warn "  You can install the new Bump CLI with 'npm install -g bump-cli'"
+      warn "                                     or 'yarn global add bump-cli'"
+      warn ":WARNING:"
+      warn ""
       Dry::CLI.new(Commands).call(*args)
     end
 
