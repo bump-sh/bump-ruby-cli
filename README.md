@@ -1,5 +1,12 @@
 # Bump::CLI
 
+**⚠️ DEPRECATION WARNING:** This repository is now deprecated in favor of our [new Node based Bump CLI](https://github.com/bump-sh/cli). Please migrate to v2.x+ version of our CLI to enjoy all features of Bump.sh. ⚠️
+
+- [**Read the new CLI announcement**](https://headwayapp.co/bump-changelog/new-command-line-interface-era-196226)
+- [**Read our Bump CLI help section**](https://help.bump.sh/bump-cli)
+
+_If you still want to use this ruby gem, please [contact us](mailto:hello@bump.sh) to discuss alternatives and share your use case. Thank you!_
+
 The `bump-cli` gem provides a simple command line access to the Bump (https://bump.sh) API.
 
 ## Installation
